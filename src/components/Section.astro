@@ -1,0 +1,156 @@
+---
+import { log } from 'astro/dist/core/logger/core';
+
+export interface Props {
+    title: string; 
+    button: string;
+    input_field: string[];
+    
+}
+const pitch = [0,2,3,4,5,6,7,8,9,10]; 
+const speed = [25,30,35,40,45,50,55,60,65]; 
+const zone = [1,2,3,4,5,6,7,8,9]; 
+const input_field = ['Pitch', 'Speed','Zone', 'Delay' ]
+const {title, button} = Astro.props;
+
+
+
+---
+
+<li class="section">
+    <a href="">
+    <h2>{title}
+    </h2>
+    <ul>
+        <div class="dropdown">
+            <button class="dropbtn">{input_field[0]}   </button>
+            <div class="dropdown-content">
+                {pitch.map(select => <a class="Selection" id="Pitch_select" href="#">{select}</a>)}
+            </div>
+    </div>  
+
+        <div class="dropdown">
+                
+                <button class="dropbtn">{input_field[1]}   </button>
+                <div class="dropdown-content">
+                    {speed.map(select => <a href="#">{select}</a>)}
+                </div>
+        </div>      
+
+        <div class="dropdown">
+            <button class="dropbtn">{input_field[2]} </button>
+            <div class="dropdown-content">
+                {zone.map(select => 
+                    <a href="#">{select}</a>
+            
+                )}
+                
+            </div>
+        </div>  
+</ul>   
+</a>
+</li>
+
+
+<script>
+    let selection = document.querySelector('.Selection');
+    selection.addEventListener('click',() => {
+        const select_pitch = document.getElementById('Pitch_select').innerText;
+
+        console.log(select_pitch);
+
+    
+    })
+
+
+</script>
+
+
+
+<style>
+    .section{
+        list-style: none;
+		display: flex;
+		padding: 0.25rem;
+		background-color: white;
+		background-image: none;
+		background-size: 400%;
+		border-radius: 0.6rem;
+		background-position: 100%;
+		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    }
+    .section > a {
+		width: 100%;
+		text-decoration: none;
+		line-height: 1.4;
+		padding: 1rem 1.3rem;
+		border-radius: 0.35rem;
+		color: #111;
+		background-color: white;
+		opacity: 0.8;
+	}
+    h2 {
+		margin: 0;
+		font-size: 1.25rem;
+		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	p {
+		margin-top: 0.5rem;
+		margin-bottom: 0;
+		color: #444;
+	}
+	.section:is(:hover, :focus-within) {
+		background-position: 0;
+		background-image: var(--accent-gradient);
+	}
+	.section:is(:hover, :focus-within) h2 {
+		color: rgb(var(--accent));
+	}
+
+    .dropbtn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+      }
+      
+      /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      
+      /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+      
+      /* Links inside the dropdown */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+      
+      /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {background-color: #f1f1f1}
+      
+      /* Show the dropdown menu on hover */
+    .dropdown:hover .dropdown-content {
+        display: block;
+      }
+      
+      /* Change the background color of the dropdown button when the dropdown content is shown */
+    .dropdown:hover .dropbtn {
+        background-color: #3e8e41;
+      }
+</style>
