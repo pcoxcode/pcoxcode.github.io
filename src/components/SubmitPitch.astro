@@ -1,0 +1,250 @@
+---
+
+export interface Props {
+    title: string; 
+}
+
+const input_field = ['Pitch', 'Speed','Zone', 'Delay' ]
+const {title, button} = Astro.props;
+
+---
+<div class="add-Pitch">
+    
+    <h3>{title}</h3>
+    <div class="sub-box">
+        <input type="text" id="pitch" name="pitch" value="" placeholder="Enter Pitch 0-10...">
+        <input type="text" id="speed" name="speed" value="" placeholder="Enter Speed 25-65...">
+        <input type="text" id="zone" name="zone" value="" placeholder="Enter Zone 1-9...">
+        <button id="btn1" class="btn" >+</button>
+    </div>
+    
+</div>
+
+<div class="table-body">
+    <table border="blue">
+        <thead>
+            <tr>
+                <th>P. No.</th>
+                <th>Pitch</th>
+                <th>Speed</th>
+                <th>Zone</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <h3 id="no-data">No Data Available...</h3>
+    <button id="btn2" class="btn">EXPORT FILE</button>
+</div>
+
+
+
+<script >
+var pitch = []; 
+var speed = []; 
+var zone = []; 
+var index = [];
+var c = 1;
+
+var button = document.querySelector('#btn1');
+var button2 = document.querySelector('#btn2');
+
+button.addEventListener('click', addToTable)
+button2.addEventListener('click', ()=>
+{   createCSVFile(pitch,speed,zone)
+})
+
+function createCSVFile(pitch_list,speed_list,zone_list){
+    var Sequence = []
+    var length = pitch_list.length
+
+    for(var i=0;i<length;i++){
+        Sequence.push(pitch_list[i],
+        speed_list[i],
+        zone_list[i] )
+    }
+
+    console.log(Sequence)
+
+    
+}
+
+
+function addToTable(){
+    
+    document.getElementById('no-data').style.display="none";
+    var pitchSubmission = parseInt(document.getElementById('pitch').value);
+    var speedSubmission = parseInt(document.getElementById('speed').value);
+    var zoneSubmission= parseInt(document.getElementById('zone').value);
+    
+    console.table([pitchSubmission,speedSubmission,zoneSubmission]);
+    
+    if(pitchSubmission && speedSubmission && zoneSubmission){
+        pitch= [...pitch,pitchSubmission];
+        speed= [...speed,speedSubmission];
+        zone= [...zone,zoneSubmission];
+        index= [...index,c];
+
+
+
+        displayTable();
+    }
+    else{
+        alert("incomplete data");
+    }
+}
+
+function displayTable(){
+    const length= pitch.length;
+    
+    var tr= document.createElement('tr');
+
+    for(var i=0;i<length;i++){
+        tr.innerHTML='';
+        var td1= document.createElement('td');
+        td1.innerHTML= index[i];
+        tr.appendChild(td1);
+
+        var td2= document.createElement('td');
+        td2.innerHTML= pitch[i];
+        tr.appendChild(td2);
+
+        var td3= document.createElement('td');
+        td3.innerHTML= speed[i];
+        tr.appendChild(td3);
+
+        var td4= document.createElement('td');
+        td4.innerHTML= zone[i];
+        tr.appendChild(td4);
+
+        document.getElementsByTagName('tbody')[0].appendChild(tr);
+    }
+    c++;
+    document.getElementById('pitch').textContent='';
+    document.getElementById('speed').textContent='';
+    document.getElementById('zone').textContent='';
+}
+
+
+
+</script>
+
+
+<style>
+
+.parent{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    min-height: 100vh;
+}
+.add-subject{
+    background: rgb(223, 238, 243);
+    text-transform: capitalize;
+    position: relative;
+}
+.title{
+    background: darkslategray;
+    color: whitesmoke;
+    margin-top: 0;
+    padding: 0.5rem 0;
+}
+
+
+
+.sub-box{
+    text-align: center;
+    padding: 0.5rem 1rem;
+}
+input{
+    font-size: 1.1rem;
+    border-radius: 0.3rem;
+    margin: 0.5rem 0;
+    padding: 0.3rem 0.8rem;
+    border: none;
+    background: white;
+    color: teal;
+}
+input:focus{
+    outline: none;
+    background: whitesmoke;
+}
+.marksheet{
+    background: rgb(250,191,168);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.marksheet h2{
+    color: teal;
+}
+.marksheet p{
+    color: darkolivegreen;
+    font-family: sans-serif;
+    font-size: 1rem;
+}
+
+.marks-table{
+    background: whitesmoke;
+    overflow-y: auto;
+}
+.table-body{
+    padding: 1rem 2rem;
+    text-align: center;
+    height: 25rem;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.btn{
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 1rem;
+    background: cornflowerblue;
+    color: whitesmoke;
+    outline: none;
+}
+.btn:active{
+    background: cadetblue;
+}
+#btn1, #btn2{
+    margin-top: 2rem;
+}
+#btn3{
+    margin-top: 0.5rem;
+    color: whitesmoke;
+    background: lightgray;
+}
+.table-body table{
+    width: 100%;
+    color: dimgray;
+    border-collapse: collapse;
+    font-size: 1.3rem;
+}
+table td,th{
+    padding: 0.2rem 0;
+    text-transform: capitalize;
+}
+
+
+.grade-system{
+    background: rgb(252,231,234);
+    text-align: center;
+}
+.grade-body table{
+    width: 100%;
+    margin-top: 5rem;
+    border-collapse: collapse;
+    font-size: 1.2rem;
+    color: darkslategrey;
+
+}
+.grade-body table td{
+    border: none;
+    padding: 0.5rem;
+}
+.grade-body table tr:nth-child(even){
+    background: dimgray;
+    color: whitesmoke;
+}
+
+</style>

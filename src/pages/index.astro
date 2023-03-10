@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
 import Section from '../components/Section.astro';
+import Card from '../components/Card.astro';
+import SubmitPitch from '../components/SubmitPitch.astro';
 ---
 
 <Layout title="Welcome to Astro.">
@@ -20,9 +21,13 @@ import Section from '../components/Section.astro';
 			<Section
 				title="Pitches"
 				button="+"
-				input_field="Pitch"
+				input_field={["Pitch , Speed"]}
 			/>
 		</ul>
+
+		<SubmitPitch
+			title="Pitch"
+		/>
 	</main>
 </Layout>
 
@@ -30,7 +35,7 @@ import Section from '../components/Section.astro';
 	main {
 		margin: auto;
 		padding: 1.5rem;
-		max-width: 60ch;
+		max-width: 100ch;
 	}
 	h1 {
 		font-size: 3rem;
