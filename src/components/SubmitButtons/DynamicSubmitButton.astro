@@ -1,30 +1,26 @@
 ---
-import { log } from 'astro/dist/core/logger/core';
-import ZoneSubmitButton from './SubmitButtons/ZoneSubmitButton.astro';
-export interface Props {
-    title: string; 
-    button: string;
-    input_field: string[];
-    
-}
+
 const pitch = [0,2,3,4,5,6,7,8,9,10]; 
 const speed = [25,30,35,40,45,50,55,60,65]; 
 const zone = [1,2,3,4,5,6,7,8,9]; 
 const input_field = ['Pitch', 'Speed','Zone', 'Delay' ]
 const {title, button} = Astro.props;
-
-
-
 ---
 
-<li class="section">
-    <h2>{title}
-    </h2>
-    <ul>
-
-</ul>   
-</li>
-
+<div class="select-group">
+    <label for="button"> What Zone would you like? </label>
+    <button class="button" id="zone-button">
+        <span id="select-label-zone">Please Select Zone</span>
+    <div class="arrow"></div>
+    </button>
+    
+    <div id="drop-down-zone" class="drop-down hidden-zone">
+        { zone.map(select => 
+            <label class="select-item-zone" for={`"select-item-${select}"`}> {select}</label>
+            <input class="option-zone" id={`"select-item-${select}"`} type="radio" />
+        )}
+    </div>
+</div>
 
 <script>
     

@@ -1,4 +1,8 @@
 ---
+import PitchSubmitButton from './SubmitButtons/PitchSubmitButton.astro';
+import ZoneSubmitButton from './SubmitButtons/ZoneSubmitButton.astro';
+import SpeedSubmitButton from './SubmitButtons/SpeedSubmitButton.astro';
+
 
 export interface Props {
     title: string; 
@@ -12,15 +16,38 @@ const {title, button} = Astro.props;
     
     <h3>{title}</h3>
     <div class="sub-box">
+        
+        
+        <ul>
+        <div> 
+            <label> What Pitch would you like? </label>
+            <div id="pitch2">
+                <PitchSubmitButton title="Pitch" sport="Baseball" />
+            </div>
+        </div>
+            <div> 
+            <label> What Zone would you like? </label>
+                <div id="zone2">
+                 <ZoneSubmitButton title="Zone" sport="Baseball" />
+                </div>
+            </div>
+            <div> 
+                <label> What Speed would you like? </label>
+                    <div id="zone2">
+                     <SpeedSubmitButton title="Speed" sport="Baseball" />
+                    </div>
+                </div>
+        </ul>
         <input type="text" id="pitch" name="pitch" value="" placeholder="Enter Pitch 0-10...">
         <input type="text" id="speed" name="speed" value="" placeholder="Enter Speed 25-65...">
         <input type="text" id="zone" name="zone" value="" placeholder="Enter Zone 1-9...">
         <button id="btn1" class="btn" >+</button>
+ 
     </div>
     
 </div>
 
-<div class="table-body">
+<div class="table-body" id="dataTable">
     <table border="blue">
         <thead>
             <tr>
@@ -35,7 +62,7 @@ const {title, button} = Astro.props;
         </tbody>
     </table>
     <h3 id="no-data">No Data Available...</h3>
-    <button id="btn2" class="btn">EXPORT FILE</button>
+    <button id="btnExportToCsv" type="button" class="button">EXPORT FILE</button>
 </div>
 
 
@@ -48,12 +75,10 @@ var index = [];
 var c = 1;
 
 var button = document.querySelector('#btn1');
-var button2 = document.querySelector('#btn2');
+//var button2 = document.querySelector('#btn2');
 
 button.addEventListener('click', addToTable)
-button2.addEventListener('click', ()=>
-{   createCSVFile(pitch,speed,zone)
-})
+
 
 function createCSVFile(pitch_list,speed_list,zone_list){
     var Sequence = []
@@ -74,9 +99,10 @@ function createCSVFile(pitch_list,speed_list,zone_list){
 function addToTable(){
     
     document.getElementById('no-data').style.display="none";
-    var pitchSubmission = parseInt(document.getElementById('pitch').value);
-    var speedSubmission = parseInt(document.getElementById('speed').value);
-    var zoneSubmission= parseInt(document.getElementById('zone').value);
+    console.log(document.getElementById('pitch2').innerText)
+    var pitchSubmission = parseInt(document.getElementById('pitch2').innerText);
+    var speedSubmission = parseInt(document.getElementById('speed2').innerText);
+    var zoneSubmission= parseInt(document.getElementById('zone2').innerText);
     
     console.table([pitchSubmission,speedSubmission,zoneSubmission]);
     
@@ -126,6 +152,74 @@ function displayTable(){
     document.getElementById('zone').textContent='';
 }
 
+const dataTable = document.getElementById("dataTable");
+        const btnExportToCsv = document.getElementById("btnExportToCsv");
+
+        btnExportToCsv.addEventListener("click", () => {
+            const exporter = new TableCSVExporter(dataTable);
+            const csvOutput = exporter.convertToCSV();
+            const csvBlob = new Blob([csvOutput], { type: "text/csv" });
+            const blobUrl = URL.createObjectURL(csvBlob);
+            const anchorElement = document.createElement("a");
+
+            anchorElement.href = blobUrl;
+            anchorElement.download = "table-export.csv";
+            anchorElement.click();
+
+            setTimeout(() => {
+                URL.revokeObjectURL(blobUrl);
+            }, 500);
+        });
+
+class TableCSVExporter {
+    constructor (table, includeHeaders = true) {
+        this.table = table;
+        this.rows = Array.from(table.querySelectorAll("tr"));
+
+        if (!includeHeaders && this.rows[0].querySelectorAll("th").length) {
+            this.rows.shift();
+        }
+    }
+
+    convertToCSV () {
+        const lines = [];
+        const numCols = this._findLongestRowLength();
+
+        for (const row of this.rows) {
+            let line = "";
+
+            for (let i = 0; i < numCols; i++) {
+                if (row.children[i] !== undefined) {
+                    line += TableCSVExporter.parseCell(row.children[i]);
+                }
+
+                line += (i !== (numCols - 1)) ? "," : "";
+            }
+
+            lines.push(line);
+        }
+
+        return lines.join("\n");
+    }
+
+    _findLongestRowLength () {
+        return this.rows.reduce((l, row) => row.childElementCount > l ? row.childElementCount : l, 0);
+    }
+
+    static parseCell (tableCell) {
+        let parsedValue = tableCell.textContent;
+
+        // Replace all double quotes with two double quotes
+        parsedValue = parsedValue.replace(/"/g, `""`);
+
+        // If value contains comma, new-line or double-quote, enclose in double quotes
+        parsedValue = /[",\n]/.test(parsedValue) ? `"${parsedValue}"` : parsedValue;
+
+        return parsedValue;
+    }
+}
+
+
 
 
 </script>
@@ -169,6 +263,7 @@ input:focus{
     outline: none;
     background: whitesmoke;
 }
+
 .marksheet{
     background: rgb(250,191,168);
     position: absolute;
@@ -195,6 +290,17 @@ input:focus{
     overflow: hidden;
     overflow-y: auto;
 }
+.button{
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 1rem;
+    background: cornflowerblue;
+    color: whitesmoke;
+    outline: none;
+}
+.button:active{
+    background: cadetblue;
+}
 .btn{
     padding: 0.5rem 1rem;
     border: none;
@@ -206,7 +312,7 @@ input:focus{
 .btn:active{
     background: cadetblue;
 }
-#btn1, #btn2{
+#btn1, #btn2, #button{
     margin-top: 2rem;
 }
 #btn3{
@@ -220,9 +326,17 @@ input:focus{
     border-collapse: collapse;
     font-size: 1.3rem;
 }
-table td,th{
+table{
+    padding: 2%;
+    text-transform: capitalize;
+}
+td,th{
     padding: 0.2rem 0;
     text-transform: capitalize;
+}
+button{
+    margin: .5rem;
+    padding: 2rem;
 }
 
 
