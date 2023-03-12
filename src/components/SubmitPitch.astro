@@ -23,7 +23,7 @@ const {title, button} = Astro.props;
 
            <td>
 
-               <div> 
+               <div class="div-content"> 
                    <label> Choose Pitch.. </label>
                    <div id="pitch">
                        <PitchSubmitButton title="Pitch" sport="Baseball" />
@@ -31,7 +31,7 @@ const {title, button} = Astro.props;
                 </div>
             </td>
             <td>
-                <div> 
+                <div class="div-content"> 
                     <label> Choose Speed.. </label>
                     <div id="speed">
                         <SpeedSubmitButton title="Speed" sport="Baseball" />
@@ -39,7 +39,7 @@ const {title, button} = Astro.props;
                 </div>
             </td>
             <td>
-                <div> 
+                <div class="div-content"> 
                     <label> Choose Zone.. </label>
                     <div id="zone">
                         <ZoneSubmitButton title="Zone" sport="Baseball" />
@@ -79,7 +79,7 @@ const {title, button} = Astro.props;
         </tbody>
     </table>
     <h3 id="no-data">No Data Available...</h3>
-    <button id="btnExportToCsv" type="button" class="button">EXPORT FILE</button>
+    <button id="btnExportToCsv" type="button" class="button-export">EXPORT FILE</button>
 </div>
 
 
@@ -281,25 +281,16 @@ input:focus{
     background: whitesmoke;
 }
 
-.marksheet{
-    background: rgb(250,191,168);
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+
+.div-content{
+    
+    
+
 }
-.marksheet h2{
-    color: teal;
-}
-.marksheet p{
-    color: darkolivegreen;
-    font-family: sans-serif;
-    font-size: 1rem;
+label {
+    margin-bottom: 10pc;
 }
 
-.marks-table{
-    background: whitesmoke;
-    overflow-y: auto;
-}
 .table-body{
     padding: 1rem 2rem;
     text-align: center;
@@ -313,6 +304,27 @@ input:focus{
     background: cornflowerblue;
     color: whitesmoke;
     outline: none;
+}
+.button-export{
+    display:flex;
+    justify-content: center;
+    background: cornflowerblue;
+    height: 3.2rem;
+    background-position: 100%;
+    color: black;
+    padding: 1rem;
+    font-weight: bold;
+    border-radius: .3rem;
+    border: #f1f1f1;
+    transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+
+}
+.button-export:hover{
+    background: #5384ce;
+}
+.button-export:active{
+    background: cadetblue; 
 }
 .button:active{
     background: cadetblue;
