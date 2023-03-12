@@ -18,30 +18,47 @@ const {title, button} = Astro.props;
     <div class="sub-box">
         
         
-        <ul>
-        <div> 
-            <label> What Pitch would you like? </label>
-            <div id="pitch2">
-                <PitchSubmitButton title="Pitch" sport="Baseball" />
-            </div>
-        </div>
-            <div> 
-            <label> What Zone would you like? </label>
-                <div id="zone2">
-                 <ZoneSubmitButton title="Zone" sport="Baseball" />
-                </div>
-            </div>
-            <div> 
-                <label> What Speed would you like? </label>
-                    <div id="zone2">
-                     <SpeedSubmitButton title="Speed" sport="Baseball" />
+        <table>
+            <tr>
+
+           <td>
+
+               <div> 
+                   <label> Choose Pitch.. </label>
+                   <div id="pitch">
+                       <PitchSubmitButton title="Pitch" sport="Baseball" />
                     </div>
                 </div>
-        </ul>
-        <input type="text" id="pitch" name="pitch" value="" placeholder="Enter Pitch 0-10...">
-        <input type="text" id="speed" name="speed" value="" placeholder="Enter Speed 25-65...">
-        <input type="text" id="zone" name="zone" value="" placeholder="Enter Zone 1-9...">
-        <button id="btn1" class="btn" >+</button>
+            </td>
+            <td>
+                <div> 
+                    <label> Choose Speed.. </label>
+                    <div id="speed">
+                        <SpeedSubmitButton title="Speed" sport="Baseball" />
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div> 
+                    <label> Choose Zone.. </label>
+                    <div id="zone">
+                        <ZoneSubmitButton title="Zone" sport="Baseball" />
+                    </div>
+                </div>
+            </td>
+            <td>
+                <label> Add Pitch..</label>
+                <button id="btn1" class="btn" >+</button>
+            </td>
+            </tr>
+        </table>
+        
+        <!--
+
+            <input type="text" id="pitch" name="pitch" value="" placeholder="Enter Pitch 0-10...">
+            <input type="text" id="speed" name="speed" value="" placeholder="Enter Speed 25-65...">
+            <input type="text" id="zone" name="zone" value="" placeholder="Enter Zone 1-9...">
+        -->
  
     </div>
     
@@ -99,10 +116,10 @@ function createCSVFile(pitch_list,speed_list,zone_list){
 function addToTable(){
     
     document.getElementById('no-data').style.display="none";
-    console.log(document.getElementById('pitch2').innerText)
-    var pitchSubmission = parseInt(document.getElementById('pitch2').innerText);
-    var speedSubmission = parseInt(document.getElementById('speed2').innerText);
-    var zoneSubmission= parseInt(document.getElementById('zone2').innerText);
+
+    var pitchSubmission = parseInt(document.getElementById('pitch').innerText);
+    var speedSubmission = parseInt(document.getElementById('speed').innerText);
+    var zoneSubmission= parseInt(document.getElementById('zone').innerText);
     
     console.table([pitchSubmission,speedSubmission,zoneSubmission]);
     
@@ -144,12 +161,12 @@ function displayTable(){
         td4.innerHTML= zone[i];
         tr.appendChild(td4);
 
-        document.getElementsByTagName('tbody')[0].appendChild(tr);
+        document.getElementsByTagName('tbody')[1].appendChild(tr);
     }
     c++;
-    document.getElementById('pitch').textContent='';
+    /*document.getElementById('pitch').textContent='';
     document.getElementById('speed').textContent='';
-    document.getElementById('zone').textContent='';
+    document.getElementById('zone').textContent='';*/
 }
 
 const dataTable = document.getElementById("dataTable");
@@ -286,7 +303,6 @@ input:focus{
 .table-body{
     padding: 1rem 2rem;
     text-align: center;
-    height: 25rem;
     overflow: hidden;
     overflow-y: auto;
 }
@@ -329,6 +345,7 @@ input:focus{
 table{
     padding: 2%;
     text-transform: capitalize;
+    width: 100%;
 }
 td,th{
     padding: 0.2rem 0;
