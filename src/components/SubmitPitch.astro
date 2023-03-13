@@ -21,15 +21,16 @@ const {title, button} = Astro.props;
         <table>
             <tr>
 
-           <td>
-
-               <div class="div-content"> 
-                   <label> Choose Pitch.. </label>
-                   <div id="pitch">
-                       <PitchSubmitButton title="Pitch" sport="Baseball" />
+           
+                <td>
+                    <div class="div-content"> 
+                        <label> Choose Zone.. </label>
+                        <div id="zone">
+                            <ZoneSubmitButton title="Zone" sport="Baseball" />
+                        </div>
                     </div>
-                </div>
-            </td>
+                </td>   
+            
             <td>
                 <div class="div-content"> 
                     <label> Choose Speed.. </label>
@@ -39,10 +40,11 @@ const {title, button} = Astro.props;
                 </div>
             </td>
             <td>
+
                 <div class="div-content"> 
-                    <label> Choose Zone.. </label>
-                    <div id="zone">
-                        <ZoneSubmitButton title="Zone" sport="Baseball" />
+                    <label> Choose Pitch.. </label>
+                    <div id="pitch">
+                        <PitchSubmitButton title="Pitch" sport="Baseball" />
                     </div>
                 </div>
             </td>
@@ -69,9 +71,10 @@ const {title, button} = Astro.props;
         <thead>
             <tr>
                 <th>P. No.</th>
-                <th>Pitch</th>
-                <th>Speed</th>
                 <th>Zone</th>
+                <th>Speed</th>
+                <th>Pitch</th>
+                <th>Delay</th>
             </tr>
         </thead>
         <tbody>
@@ -150,7 +153,7 @@ function displayTable(){
         tr.appendChild(td1);
 
         var td2= document.createElement('td');
-        td2.innerHTML= pitch[i];
+        td2.innerHTML= zone[i];
         tr.appendChild(td2);
 
         var td3= document.createElement('td');
@@ -158,8 +161,13 @@ function displayTable(){
         tr.appendChild(td3);
 
         var td4= document.createElement('td');
-        td4.innerHTML= zone[i];
+        td4.innerHTML= pitch[i];
         tr.appendChild(td4);
+
+        var td5= document.createElement('td')
+        td5.innerHTML ='5'
+        tr.appendChild(td5)
+
 
         document.getElementsByTagName('tbody')[1].appendChild(tr);
     }
@@ -175,7 +183,8 @@ const dataTable = document.getElementById("dataTable");
         btnExportToCsv.addEventListener("click", () => {
             const exporter = new TableCSVExporter(dataTable);
             const csvOutput = exporter.convertToCSV();
-            const csvBlob = new Blob([csvOutput], { type: "text/csv" });
+            const filteredOutput = filterCSV(csvOutput);
+            const csvBlob = new Blob([filteredOutput], { type: "text/csv" });
             const blobUrl = URL.createObjectURL(csvBlob);
             const anchorElement = document.createElement("a");
 
@@ -187,6 +196,15 @@ const dataTable = document.getElementById("dataTable");
                 URL.revokeObjectURL(blobUrl);
             }, 500);
         });
+
+const filterCSV = (csv) =>{
+
+    let newArray = csv.split(",");
+    newArray[2] = 'Deflector Position';
+    let FinalArray = newArray.join(',');
+    return FinalArray
+
+}
 
 class TableCSVExporter {
     constructor (table, includeHeaders = true) {
@@ -205,7 +223,7 @@ class TableCSVExporter {
         for (const row of this.rows) {
             let line = "";
 
-            for (let i = 0; i < numCols; i++) {
+            for (let i = 1; i < numCols; i++) {
                 if (row.children[i] !== undefined) {
                     line += TableCSVExporter.parseCell(row.children[i]);
                 }
@@ -306,8 +324,9 @@ label {
     outline: none;
 }
 .button-export{
-    display:flex;
+    
     justify-content: center;
+    align-items: center;
     background: cornflowerblue;
     height: 3.2rem;
     background-position: 100%;
