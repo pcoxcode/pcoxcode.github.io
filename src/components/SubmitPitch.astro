@@ -2,6 +2,8 @@
 import PitchSubmitButton from './SubmitButtons/PitchSubmitButton.astro';
 import ZoneSubmitButton from './SubmitButtons/ZoneSubmitButton.astro';
 import SpeedSubmitButton from './SubmitButtons/SpeedSubmitButton.astro';
+import DynamicSubmitButton from './SubmitButtons/DynamicSubmitButton.astro';
+
 
 
 export interface Props {
@@ -46,6 +48,16 @@ const {title, button} = Astro.props;
                     <div id="pitch">
                         <PitchSubmitButton title="Pitch" sport="Baseball" />
                     </div>
+                </div>
+            </td>
+            <td>
+                <div class="div-content">
+                    <label>Choose Zone</label>
+                    <div id="dynamic-sub-btn">
+                        
+                            <DynamicSubmitButton title = "Dynamic"/>
+                    </div>
+
                 </div>
             </td>
             <td>
@@ -100,20 +112,6 @@ var button = document.querySelector('#btn1');
 button.addEventListener('click', addToTable)
 
 
-function createCSVFile(pitch_list,speed_list,zone_list){
-    var Sequence = []
-    var length = pitch_list.length
-
-    for(var i=0;i<length;i++){
-        Sequence.push(pitch_list[i],
-        speed_list[i],
-        zone_list[i] )
-    }
-
-    console.log(Sequence)
-
-    
-}
 
 
 function addToTable(){
@@ -123,13 +121,13 @@ function addToTable(){
     var pitchSubmission = parseInt(document.getElementById('pitch').innerText);
     var speedSubmission = parseInt(document.getElementById('speed').innerText);
     var zoneSubmission= parseInt(document.getElementById('zone').innerText);
+    var dynamicSubmission = parseInt(document.getElementById('dynamic-sub-btn').innerText)
+    console.table([pitchSubmission,speedSubmission,dynamicSubmission]);
     
-    console.table([pitchSubmission,speedSubmission,zoneSubmission]);
-    
-    if(pitchSubmission && speedSubmission && zoneSubmission){
+    if(pitchSubmission && speedSubmission && dynamicSubmission){
         pitch= [...pitch,pitchSubmission];
         speed= [...speed,speedSubmission];
-        zone= [...zone,zoneSubmission];
+        zone= [...zone,dynamicSubmission];
         index= [...index,c];
 
 
@@ -198,12 +196,8 @@ const dataTable = document.getElementById("dataTable");
         });
 
 const filterCSV = (csv) =>{
-
-    let newArray = csv.split(",");
-    newArray[2] = 'Deflector Position';
-    let FinalArray = newArray.join(',');
-    return FinalArray
-
+    let filteredString = csv.replace('Pitch', 'Deflector Position');
+    return filteredString
 }
 
 class TableCSVExporter {

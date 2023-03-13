@@ -8,87 +8,52 @@ const {title, button} = Astro.props;
 ---
 
 <div class="select-group">
-    <label for="button"> What Zone would you like? </label>
-    <button class="button" id="zone-button">
-        <span id="select-label-zone">Please Select Zone</span>
-    <div class="arrow"></div>
+    <button class="button" id="dynamic-button">
+        <span id="select-label-dynamic">Please Select Zone</span>
     </button>
     
-    <div id="drop-down-zone" class="drop-down hidden-zone">
+    <div id="drop-down-dynamic" class="drop-down hidden-dynamic">
         { zone.map(select => 
-            <label class="select-item-zone" for={`"select-item-${select}"`}> {select}</label>
-            <input class="option-zone" id={`"select-item-${select}"`} type="radio" />
+            <label class="select-item-dynamic" for={`"select-item-${select}"`} id={`select-item2-${select}`}> {select}</label>
+            <input class="option-dynamic" id={`"select-item-${select}"`} type="radio" />
         )}
     </div>
 </div>
 
 <script>
-    
 
-    
-    const button = document.querySelector('#button')
-    const zonebutton = document.querySelector('#zone-button')
+    const dynamicbutton = document.querySelector('#dynamic-button') 
+    const selectdynamic = document.querySelector('#drop-down-dynamic')
+    const options = document.querySelectorAll('.option-dynamic')
+    const selectLabeldynamic = document.querySelector('#select-label-dynamic')
 
-
-    const select = document.querySelector('#drop-down')
-    const selectZone = document.querySelector('#drop-down-zone')
-
-
-    const options = document.querySelectorAll('.option')
-    const zoneoptions = document.querySelectorAll('.select-item-zone')
-    
-    
-    const selectLabel = document.querySelector('#select-label')
-    const selectLabelZone = document.querySelector('#select-label-zone')
-
-    zonebutton.addEventListener('click', function(event){
+    dynamicbutton.addEventListener('click', function(event){
         event.preventDefault()
-        toggleHiddenZone()
+        toggleHiddendynamic()
     })
 
-    button.addEventListener('click', function(event){
-        event.preventDefault()
-        toggleHidden()
 
-    })
-    function toggleHiddenZone(){
-        selectZone.classList.toggle('hidden-zone')
-    }
-    function toggleHidden(){
-        select.classList.toggle('hidden')
+    function toggleHiddendynamic(){
+        selectdynamic.classList.toggle('hidden-dynamic')
     }
 
-    console.log(zoneoptions)
-    zoneoptions.forEach(function(option){
 
+    function setSelectdynamicTitle(event){
+        const inputElement = document.getElementById(event.target.id)
+        const labelElement = inputElement.previousElementSibling.textContent
+        console.log(labelElement)
+        selectLabeldynamic.innerText = labelElement;
        
-        console.log(option.textContent)
-        option.addEventListener('click',
-        function(event){
-            setSelectZoneTitle(event)            
-        })
-    })
-    function setSelectZoneTitle(event){
-        const labelElement = document.querySelector(`label[for="select-item-4"]`)
-        const inputElement = document.querySelector(`input[class="${event}"`)
-
-        console.log(labelElement, inputElement)
-        selectLabelZone.innerText = labelElement;
-        toggleHiddenZone()
     }
     
     options.forEach(function(option){
         option.addEventListener('click',
         function(event){
-            setSelectTitle(event)            
+            setSelectdynamicTitle(event);
+            toggleHiddendynamic();          
         })
     })
-    function setSelectTitle(event){
-        const labelElement = document.querySelector(`label[for="${event.target.id}"]`).innerText
-        console.log(labelElement)
-        selectLabel.innerText = labelElement;
-        toggleHidden()
-    }
+
 
 </script>
 
@@ -118,16 +83,11 @@ const {title, button} = Astro.props;
         transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
     }
-    .arrow{
-        border: solid black;
-        border-width: 0px 2px 2px 0px;
-        padding: 4px;
-        transform: rotate(45deg);
-    }
+
     .option{
         display: none;
     }
-    .option-zone{
+    .option-dynamic{
         display: none;
     }
     .drop-down{
@@ -146,19 +106,19 @@ const {title, button} = Astro.props;
     .select-item:hover{
         background-color: #ecd2ff;
     }
-    .select-item-zone{
+    .select-item-dynamic{
         background-color: white;
         padding: 1rem;
         color: black;
     }
-    .select-item-zone:hover{
+    .select-item-dynamic:hover{
         background-color: #ecd2ff;
     }
 
     .hidden{
         display: none;
     }
-    .hidden-zone{
+    .hidden-dynamic{
         display: none;
     }
     .section{
