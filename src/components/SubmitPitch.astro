@@ -19,11 +19,30 @@ const {title, button} = Astro.props;
     <h3>{title}</h3>
     <div class="sub-box">
         
-        
-        <table>
+        <div class="grid">
+            <div class="div-content zone">
+                <div id="zone">
+                    <ZoneSubmitButton title="Zone" sport="Baseball" />
+                </div>
+            </div>
+            <div class="div-content speed">
+                <div id="speed">
+                    <SpeedSubmitButton title="Speed" sport="Baseball" />
+                </div>
+            </div>
+            <div class="div-content Pitch">
+                <div id="pitch">
+                    <PitchSubmitButton title="Pitch" sport="Baseball" />
+                </div>
+            </div>
+            <div class="div-content Add">
+                <div class="btn" id="btn1">
+                    +
+                </div>
+            </div>
+        </div>
+        <!--<table>
             <tr>
-
-           
                 <td>
                     <div class="div-content"> 
                         <label> Choose Zone.. </label>
@@ -54,7 +73,6 @@ const {title, button} = Astro.props;
                 <div class="div-content">
                     <label>Choose Zone</label>
                     <div id="dynamic-sub-btn">
-                        
                             <DynamicSubmitButton title = "Dynamic"/>
                     </div>
 
@@ -67,13 +85,7 @@ const {title, button} = Astro.props;
             </tr>
         </table>
         
-        <!--
-
-            <input type="text" id="pitch" name="pitch" value="" placeholder="Enter Pitch 0-10...">
-            <input type="text" id="speed" name="speed" value="" placeholder="Enter Speed 25-65...">
-            <input type="text" id="zone" name="zone" value="" placeholder="Enter Zone 1-9...">
-        -->
- 
+    -->
     </div>
     
 </div>
@@ -121,13 +133,13 @@ function addToTable(){
     var pitchSubmission = parseInt(document.getElementById('pitch').innerText);
     var speedSubmission = parseInt(document.getElementById('speed').innerText);
     var zoneSubmission= parseInt(document.getElementById('zone').innerText);
-    var dynamicSubmission = parseInt(document.getElementById('dynamic-sub-btn').innerText)
-    console.table([pitchSubmission,speedSubmission,dynamicSubmission]);
+    //var dynamicSubmission = parseInt(document.getElementById('dynamic-sub-btn').innerText)
+    console.table([pitchSubmission,speedSubmission,zoneSubmission]);
     
-    if(pitchSubmission && speedSubmission && dynamicSubmission){
+    if(pitchSubmission && speedSubmission && zoneSubmission){
         pitch= [...pitch,pitchSubmission];
         speed= [...speed,speedSubmission];
-        zone= [...zone,dynamicSubmission];
+        zone= [...zone,zoneSubmission];
         index= [...index,c];
 
 
@@ -167,12 +179,10 @@ function displayTable(){
         tr.appendChild(td5)
 
 
-        document.getElementsByTagName('tbody')[1].appendChild(tr);
+        document.getElementsByTagName('tbody')[0].appendChild(tr);
     }
     c++;
-    /*document.getElementById('pitch').textContent='';
-    document.getElementById('speed').textContent='';
-    document.getElementById('zone').textContent='';*/
+
 }
 
 const dataTable = document.getElementById("dataTable");
@@ -273,6 +283,14 @@ class TableCSVExporter {
     padding: 0.5rem 0;
 }
 
+.grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: minmax(100px);
+    column-gap: 2%;
+    text-align: center;
+    
+}
 
 
 .sub-box{
@@ -295,13 +313,9 @@ input:focus{
 
 
 .div-content{
-    
-    
+    grid-row: inherit;
+}
 
-}
-label {
-    margin-bottom: 10pc;
-}
 
 .table-body{
     padding: 1rem 2rem;
@@ -353,14 +367,8 @@ label {
 .btn:active{
     background: cadetblue;
 }
-#btn1, #btn2, #button{
-    margin-top: 2rem;
-}
-#btn3{
-    margin-top: 0.5rem;
-    color: whitesmoke;
-    background: lightgray;
-}
+
+
 .table-body table{
     width: 100%;
     color: dimgray;

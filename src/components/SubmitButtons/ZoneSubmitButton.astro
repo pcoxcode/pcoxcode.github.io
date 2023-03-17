@@ -11,56 +11,59 @@ export interface Props {
 
 
 <div class="select-group">
-    <!--<label for="button"> What {title} would you like? </label>-->
+    
     <button class="button" id="button-zone">
         <span id="select-label-zone">  Please Select {title}</span>
 
     </button>
+    <div class="grid-buttons">
+
     
-    <div id="drop-down-zone" class="drop-down hidden-zone">
-        <label class="select-item" for="select-zone-1">1</label>
-        <input class="option-zone" id="select-zone-1" type="radio" name="zone" value="zone-1">
-        <label class="select-item" for="select-zone-2">2</label>
-        <input class="option-zone" id="select-zone-2" type="radio" name="zone" value="zone-2">
-        <label class="select-item" for="select-zone-3">3</label>
-        <input class="option-zone" id="select-zone-3" type="radio" name="zone" value="zone-3">
-        <label class="select-item" for="select-zone-4">4</label>
-        <input class="option-zone" id="select-zone-4" type="radio" name="zone" value="zone-4">
-        <label class="select-item" for="select-zone-5">5</label>
-        <input class="option-zone" id="select-zone-5" type="radio" name="zone" value="zone-5">
-        <label class="select-item" for="select-zone-6">6</label>
-        <input class="option-zone" id="select-zone-6" type="radio" name="zone" value="zone-6">
-        <label class="select-item" for="select-zone-7">7</label>
-        <input class="option-zone" id="select-zone-7" type="radio" name="zone" value="zone-7">
-        <label class="select-item" for="select-zone-8">8</label>
-        <input class="option-zone" id="select-zone-8" type="radio" name="zone" value="zone-8">
-        <label class="select-item" for="select-zone-9">9</label>
-        <input class="option-zone" id="select-zone-9" type="radio" name="zone" value="zone-9">
+    <div class="grid-row">
+        <div class="grid-cell select-zone-1">
+            <label class="select-item" for="select-zone-1">1</label>
+            <input class="option-zone" id="select-zone-1" type="radio" name="zone" value="zone-1">
+        </div>
+        <div class="grid-cell">
+            <label class="select-item" for="select-zone-2">2</label>
+            <input class="option-zone" id="select-zone-2" type="radio" name="zone" value="zone-2">
+        </div>
+        <div class="grid-cell">
+            <label class="select-item" for="select-zone-3">3</label>
+            <input class="option-zone" id="select-zone-3" type="radio" name="zone" value="zone-3"> 
+        </div>
     </div>
+    <div class="grid-row">
+        <div class="grid-cell">
+            <label class="select-item" for="select-zone-4">4</label>
+            <input class="option-zone" id="select-zone-4" type="radio" name="zone" value="zone-4"></div>
+        <div class="grid-cell">
+            <label class="select-item" for="select-zone-5">5</label>
+            <input class="option-zone" id="select-zone-5" type="radio" name="zone" value="zone-5"></div>
+        <div class="grid-cell">
+            <label class="select-item" for="select-zone-6">6</label>
+            <input class="option-zone" id="select-zone-6" type="radio" name="zone" value="zone-6"></div>
+    </div>
+    <div class="grid-row">
+        <div class="grid-cell">
+            <label class="select-item" for="select-zone-7">7</label>
+            <input class="option-zone" id="select-zone-7" type="radio" name="zone" value="zone-7"></div>
+        <div class="grid-cell">
+            <label class="select-item" for="select-zone-8">8</label>
+            <input class="option-zone" id="select-zone-8" type="radio" name="zone" value="zone-8"></div>
+        <div class="grid-cell">
+            <label class="select-item" for="select-zone-9">9</label>
+            <input class="option-zone" id="select-zone-9" type="radio" name="zone" value="zone-9"></div>
+    </div>
+    </div>
+
 </div>
 
 <script>
     
-    const buttonZone = document.querySelector('#button-zone')
-
-
-    const selectZone = document.querySelector('#drop-down-zone')
-
-
     const zoneOptions = document.querySelectorAll('.option-zone')
-    
-    
     const selectLabelZone = document.querySelector('#select-label-zone')
 
-    buttonZone.addEventListener('click', function(event){
-        event.preventDefault()
-        toggleHiddenZone()
-
-    })
-
-    function toggleHiddenZone(){
-        selectZone.classList.toggle('hidden-zone')
-    }
     
     zoneOptions.forEach(function(option){
         option.addEventListener('click',
@@ -72,7 +75,6 @@ export interface Props {
         const labelElement = document.querySelector(`label[for="${event.target.id}"]`).innerText
         console.log(labelElement)
         selectLabelZone.innerText = labelElement;
-        toggleHiddenZone()
     }
 
 </script>
@@ -81,7 +83,7 @@ export interface Props {
 
     label{
         display: block;
-        padding: 2rem 0 0.5rem;
+        padding: 1rem 0 0.5rem;
     }
     .select-group{
         position: relative;
@@ -143,11 +145,34 @@ export interface Props {
 		color: rgb(var(--accent));
 	}
 	
-   
-      /* The container <div> - needed to position the dropdown content */
     .dropdown {
         position: relative;
       }
-      
+    .grid-cell{
+        grid-row: inherit;
+        list-style: none;
+		padding: 0.25rem;
+		background-color: white;
+		background-image: none;
+		background-size: 50%;
+		border-radius: 0.6rem;
+		background-position: 50%;
+		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    } 
+   .grid-buttons{
+        margin-top: 5%;
+   }
+    .grid-row{
     
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows:  .2fr .2fr;
+    column-gap: 5%;
+    row-gap:5%;} 
+    .grid-cell:hover{
+        background-color: #ecd2ff; 
+		box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    }
+
 </style>
