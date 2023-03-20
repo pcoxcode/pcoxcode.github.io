@@ -1,5 +1,7 @@
 ---
-
+const SELECT_ITEM ='select-item'
+        
+        
 
 export interface Props {
     title: string;
@@ -17,7 +19,7 @@ const {title, sport} = Astro.props;
     </button>
     
     <div id="drop-down" class="drop-down hidden-pitch">
-        <label class="select-item" for="select-pitch-12">12</label>
+        <label class={SELECT_ITEM} for="select-pitch-12">12</label>
         <input class="option-pitch" id="select-pitch-12" type="radio" name="pitch" value="pitch-12">
         <label class="select-item" for="select-pitch-2">2</label>
         <input class="option-pitch" id="select-pitch-2" type="radio" name="pitch" value="pitch-2">
@@ -40,42 +42,98 @@ const {title, sport} = Astro.props;
     </div>
 </div>
 
+<div class="grid-pitches">   
+    <div class="select-hand" data-pitch="Right">Right</div>
+    <div class="select-hand" data-pitch="Left">Left</div>
+    <div class="pitch-cell" data-pitch="Fastball">Fastball</div>
+    <div class="pitch-cell" data-pitch="Slider">Slider</div>
+    <div Change class="pitch-cell" data-pitch="Change-up">Change Up</div>
+    <div class="pitch-cell" data-pitch="Curve">Curve</div>
+    <div class="pitch-cell" data-pitch="Split-finger">Split Finger</div>
+    <div class="pitch-cell" data-pitch="12-6Curve">12-6 Curve</div>
+    
+</div>
+
 <script>
     
     const button = document.querySelector('#button')
-
-
     const select = document.querySelector('#drop-down')
-
-
     const pitchOptions = document.querySelectorAll('.option-pitch')
-    
-    
     const selectLabel = document.querySelector('#select-label-pitch')
+    const selectHandedness = document.querySelectorAll('.select-hand')
+    
+    const pitchSelect = document.querySelectorAll('.pitch-cell');
+    const ACTIVE = 'active'
+    const CLICK = 'click'
+    const TOGGLE_CLASS = 'hidden-pitch'
+    const FASTBALL =  'Fastball'
+    const SLIDER =  'Slider'
+    const CHANGEUP =  'Change-up'
+    const CURVE =  'Curve'
+    const SPLITER =  'Spliter'
+    const TWELVESIXCURVE =  '12-6 Curve'
+    const RIGHT = 'Right'
+    const LEFT = 'Left'
+   
+    const righthandClockPositions = new Map ([
+            [ FASTBALL, 12], 
+            [ SLIDER, 3],
+            [ CHANGEUP, 8],
+            [ CURVE, 5],
+            [ SPLITER, 6],
+            [ TWELVESIXCURVE, 6 ]]
+    )
 
-    button.addEventListener('click', function(event){
+    const convertClockPositions = (pitchObject) => {
+        const activeClass = document.querySelector('.select-hand.active')
+        if(activeClass==null)return
+        const hand = activeClass.innerText
+        console.log(hand)
+        if(hand == LEFT) {
+            pitchObject.set(SLIDER, 9)
+            pitchObject.set(CHANGEUP, 4)
+            pitchObject.set(CURVE, 7)
+        } 
+        if (hand == RIGHT){
+            pitchObject.set(SLIDER, 3)
+            pitchObject.set(CHANGEUP, 8)
+            pitchObject.set(CURVE, 5)
+        }
+        return pitchObject
+    }
+
+    const selectOptions = (array, select) => {
+        select.addEventListener(CLICK, ()=> {
+            array.forEach(selection => selection.classList.remove(ACTIVE))
+            select.classList.add(ACTIVE); 
+            console.log(select.innerText)
+        })}
+        
+    const toggleHidden = () => select.classList.toggle(TOGGLE_CLASS)
+        
+    const setSelectTitle = (event: Event) => {
+        const labelElement = document.querySelector(`label[for="${event.target.id}"]`).innerText
+        selectLabel.innerText = labelElement
+        toggleHidden()
+        console.log(labelElement)
+        }
+        
+    pitchSelect.forEach(pitch => selectOptions(pitchSelect,pitch))
+    selectHandedness.forEach(hand => selectOptions(selectHandedness,hand))
+
+    button.addEventListener(CLICK, function(event){
         event.preventDefault()
         toggleHidden()
-
-    })
-
-    function toggleHidden(){
-        select.classList.toggle('hidden-pitch')
-    }
-    
-    pitchOptions.forEach(function(option){
-        option.addEventListener('click',
-        function(event){
-            setSelectTitle(event)            
         })
-    })
-    function setSelectTitle(event){
-        const labelElement = document.querySelector(`label[for="${event.target.id}"]`).innerText
-        console.log(labelElement)
-        selectLabel.innerText = labelElement;
-        toggleHidden()
-    }
-
+    console.log(righthandClockPositions)    
+    pitchOptions.forEach(option => {
+        option.addEventListener(CLICK, event => {
+            const handselect = convertClockPositions(righthandClockPositions)
+            console.log(handselect)
+            setSelectTitle(event)}
+            )
+        })
+        
 </script>
 
 <style>
@@ -112,8 +170,15 @@ const {title, sport} = Astro.props;
     .hidden-pitch{
         display: none;
     }
-
-    .section{
+	.grid-pitches{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        position: relative;
+        gap: 1rem;
+        max-width: fit-content;
+    }
+    
+    .select-hand, .pitch-cell{
         list-style: none;
 		display: flex;
 		padding: 0.25rem;
@@ -124,6 +189,14 @@ const {title, sport} = Astro.props;
 		background-position: 100%;
 		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        justify-content: center;
+    }
+    .select-hand:hover,.pitch-cell:hover{
+        background-color: #b6b6f9;
+    }
+
+    .active{
+        background-color: #3e8e41;
     }
  
     h2 {
@@ -143,9 +216,7 @@ const {title, sport} = Astro.props;
 	.button:is(:hover, :focus-within) h2 {
 		color: rgb(var(--accent));
 	}
-	
-   
-      /* The container <div> - needed to position the dropdown content */
+
     .dropdown {
         position: relative;
       }
