@@ -4,16 +4,16 @@ const pitch = [0,2,3,4,5,6,7,8,9,10];
 const speed = [25,30,35,40,45,50,55,60,65]; 
 const zone = [1,2,3,4,5,6,7,8,9]; 
 const input_field = ['Pitch', 'Speed','Zone', 'Delay' ]
-const {title, button} = Astro.props;
+const {title,array, button} = Astro.props;
 ---
 
 <div class="select-group">
     <button class="button" id="dynamic-button">
-        <span id="select-label-dynamic">Please Select Zone</span>
+        <span id="select-label-dynamic">Please Select {title}</span>
     </button>
     
     <div id="drop-down-dynamic" class="drop-down hidden-dynamic">
-        { zone.map(select => 
+        { array.map(select => 
             <label class="select-item-dynamic" for={`"select-item-${select}"`} id={`select-item2-${select}`}> {select}</label>
             <input class="option-dynamic" id={`"select-item-${select}"`} type="radio" />
         )}

@@ -4,7 +4,8 @@ import ZoneSubmitButton from './SubmitButtons/ZoneSubmitButton.astro';
 import SpeedSubmitButton from './SubmitButtons/SpeedSubmitButton.astro';
 import DynamicSubmitButton from './SubmitButtons/DynamicSubmitButton.astro';
 
-
+const dynamicZone = [1,2,3,4,5,6,7,8,9];
+const pitchOptions = [12,2,3,4,5,6,7,8,9,10];
 
 export interface Props {
     title: string; 
@@ -17,6 +18,9 @@ const {title, button} = Astro.props;
 <div class="add-Pitch">
     
     <h3>{title}</h3>
+    <div> 
+        <PitchSubmitButton title="Pitch" sport="Baseball"/>
+    </div>
     <div class="sub-box">
         
         <div class="grid">
@@ -32,7 +36,12 @@ const {title, button} = Astro.props;
             </div>
             <div class="div-content Pitch">
                 <div id="pitch">
-                    <PitchSubmitButton title="Pitch" sport="Baseball" />
+                    <DynamicSubmitButton title="Pitch" array={pitchOptions}/>
+                </div>
+            </div>
+            <div class="div-content ZONE">
+                <div id="dynamic">
+                    <DynamicSubmitButton title="Pitch" array={dynamicZone}/>
                 </div>
             </div>
             <div class="div-content Add">
@@ -41,51 +50,6 @@ const {title, button} = Astro.props;
                 </div>
             </div>
         </div>
-        <!--<table>
-            <tr>
-                <td>
-                    <div class="div-content"> 
-                        <label> Choose Zone.. </label>
-                        <div id="zone">
-                            <ZoneSubmitButton title="Zone" sport="Baseball" />
-                        </div>
-                    </div>
-                </td>   
-            
-            <td>
-                <div class="div-content"> 
-                    <label> Choose Speed.. </label>
-                    <div id="speed">
-                        <SpeedSubmitButton title="Speed" sport="Baseball" />
-                    </div>
-                </div>
-            </td>
-            <td>
-
-                <div class="div-content"> 
-                    <label> Choose Pitch.. </label>
-                    <div id="pitch">
-                        <PitchSubmitButton title="Pitch" sport="Baseball" />
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="div-content">
-                    <label>Choose Zone</label>
-                    <div id="dynamic-sub-btn">
-                            <DynamicSubmitButton title = "Dynamic"/>
-                    </div>
-
-                </div>
-            </td>
-            <td>
-                <label> Add Pitch..</label>
-                <button id="btn1" class="btn" >+</button>
-            </td>
-            </tr>
-        </table>
-        
-    -->
     </div>
     
 </div>
@@ -330,6 +294,8 @@ input:focus{
     background: cornflowerblue;
     color: whitesmoke;
     outline: none;
+    position: sticky;
+
 }
 .button-export{
     
