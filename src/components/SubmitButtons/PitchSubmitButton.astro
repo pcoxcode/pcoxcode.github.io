@@ -1,5 +1,6 @@
 ---
 const SELECT_ITEM ='select-item'
+const CHANGEUP =  'Change-up'
         
         
 
@@ -13,7 +14,6 @@ const {title, sport} = Astro.props;
 
 
 <div class="select-group">
-    <!--<label for="button"> What {title} would you like? </label>-->
     <button class="button" id="button">
         <span id="select-label-pitch">  Please Select {title}</span>
     </button>
@@ -21,7 +21,7 @@ const {title, sport} = Astro.props;
     <div id="drop-down" class="drop-down hidden-pitch">
         <label class={SELECT_ITEM} for="select-pitch-12">12</label>
         <input class="option-pitch" id="select-pitch-12" type="radio" name="pitch" value="pitch-12">
-        <label class="select-item" for="select-pitch-2">2</label>
+        <label class={SELECT_ITEM} for="select-pitch-2">2</label>
         <input class="option-pitch" id="select-pitch-2" type="radio" name="pitch" value="pitch-2">
         <label class="select-item" for="select-pitch-3">3</label>
         <input class="option-pitch" id="select-pitch-3" type="radio" name="pitch" value="pitch-3">
@@ -35,8 +35,7 @@ const {title, sport} = Astro.props;
         <input class="option-pitch" id="select-pitch-7" type="radio" name="pitch" value="pitch-7">
         <label class="select-item" for="select-pitch-8">8</label>
         <input class="option-pitch" id="select-pitch-8" type="radio" name="pitch" value="pitch-8">
-        <label class="select-item" for="select-pitch-9">9</label>
-        <input class="option-pitch" id="select-pitch-9" type="radio" name="pitch" value="pitch-9">
+
         <label class="select-item" for="select-pitch-10">10</label>
         <input class="option-pitch" id="select-pitch-10" type="radio" name="pitch" value="pitch-10">
     </div>
@@ -45,24 +44,16 @@ const {title, sport} = Astro.props;
 <div class="grid-pitches">   
     <div class="select-hand" data-pitch="Right">Right</div>
     <div class="select-hand" data-pitch="Left">Left</div>
-    <div class="pitch-cell" data-pitch="Fastball">Fastball</div>
-    <div class="pitch-cell" data-pitch="Slider">Slider</div>
-    <div Change class="pitch-cell" data-pitch="Change-up">Change Up</div>
-    <div class="pitch-cell" data-pitch="Curve">Curve</div>
-    <div class="pitch-cell" data-pitch="Split-finger">Split Finger</div>
-    <div class="pitch-cell" data-pitch="12-6Curve">12-6 Curve</div>
+    <div id="Fastball" class="pitch-cell option-pitch" data-pitch="Fastball">Fastball</div>
+    <div id="Slider" class="pitch-cell option-pitch" data-pitch="Slider">Slider</div>
+    <div id={CHANGEUP}class="pitch-cell option-pitch" data-pitch="Change-up">Change Up</div>
+    <div id="Curve" class="pitch-cell option-pitch" data-pitch="Curve">Curve</div>
+    <div id="Spliter" class="pitch-cell option-pitch" data-pitch="Spliter">Split Finger</div>
+    <div id="TweleveSixCurve" class="pitch-cell option-pitch" data-pitch="12-6Curve">12-6 Curve</div>
     
 </div>
 
 <script>
-    
-    const button = document.querySelector('#button')
-    const select = document.querySelector('#drop-down')
-    const pitchOptions = document.querySelectorAll('.option-pitch')
-    const selectLabel = document.querySelector('#select-label-pitch')
-    const selectHandedness = document.querySelectorAll('.select-hand')
-    
-    const pitchSelect = document.querySelectorAll('.pitch-cell');
     const ACTIVE = 'active'
     const CLICK = 'click'
     const TOGGLE_CLASS = 'hidden-pitch'
@@ -74,7 +65,14 @@ const {title, sport} = Astro.props;
     const TWELVESIXCURVE =  '12-6 Curve'
     const RIGHT = 'Right'
     const LEFT = 'Left'
-   
+
+    const pitchSelect = document.querySelectorAll('.pitch-cell');
+    const select = document.querySelector(CHANGEUP)
+    const button = document.querySelector('#button')
+    const pitchOptions = document.querySelectorAll('.option-pitch')
+    const selectLabel = document.querySelector('#select-label-pitch')
+    const selectHandedness = document.querySelectorAll('.select-hand')
+    
     const righthandClockPositions = new Map ([
             [ FASTBALL, 12], 
             [ SLIDER, 3],
@@ -112,10 +110,11 @@ const {title, sport} = Astro.props;
     const toggleHidden = () => select.classList.toggle(TOGGLE_CLASS)
         
     const setSelectTitle = (event: Event) => {
-        const labelElement = document.querySelector(`label[for="${event.target.id}"]`).innerText
-        selectLabel.innerText = labelElement
-        toggleHidden()
-        console.log(labelElement)
+        //const labelElement = document.querySelector(`label[for="${event.target.id}"]`).innerText
+        const divElement = document.querySelector(`div[id="${event.target.id}"]`).textContent
+        selectLabel.innerText = divElement
+       
+       // console.log(labelElement)
         }
         
     pitchSelect.forEach(pitch => selectOptions(pitchSelect,pitch))
@@ -123,9 +122,9 @@ const {title, sport} = Astro.props;
 
     button.addEventListener(CLICK, function(event){
         event.preventDefault()
-        toggleHidden()
+        
         })
-    console.log(righthandClockPositions)    
+
     pitchOptions.forEach(option => {
         option.addEventListener(CLICK, event => {
             const handselect = convertClockPositions(righthandClockPositions)
@@ -139,7 +138,7 @@ const {title, sport} = Astro.props;
 <style>
 
     label{
-        display: block;
+        display: flex;
         padding: 2rem 0 0.5rem;
     }
     .select-group{
@@ -176,6 +175,7 @@ const {title, sport} = Astro.props;
         position: relative;
         gap: 1rem;
         max-width: fit-content;
+        margin-top: 1rem;
     }
     
     .select-hand, .pitch-cell{
