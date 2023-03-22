@@ -1,8 +1,5 @@
 ---
-const SELECT_ITEM ='select-item'
-const CHANGEUP =  'Change-up'
-        
-        
+import {FASTBALL, CHANGEUP, SLIDER, SPLITER,CURVE,TWELVESIXCURVE } from "../../scripts/PitchSelect.js"
 
 export interface Props {
     title: string;
@@ -12,127 +9,56 @@ export interface Props {
 const {title, sport} = Astro.props;
 ---
 
-
 <div class="select-group">
     <button class="button" id="button">
         <span id="select-label-pitch">  Please Select {title}</span>
     </button>
-    
-    <div id="drop-down" class="drop-down hidden-pitch">
-        <label class={SELECT_ITEM} for="select-pitch-12">12</label>
-        <input class="option-pitch" id="select-pitch-12" type="radio" name="pitch" value="pitch-12">
-        <label class={SELECT_ITEM} for="select-pitch-2">2</label>
-        <input class="option-pitch" id="select-pitch-2" type="radio" name="pitch" value="pitch-2">
-        <label class="select-item" for="select-pitch-3">3</label>
-        <input class="option-pitch" id="select-pitch-3" type="radio" name="pitch" value="pitch-3">
-        <label class="select-item" for="select-pitch-4">4</label>
-        <input class="option-pitch" id="select-pitch-4" type="radio" name="pitch" value="pitch-4">
-        <label class="select-item" for="select-pitch-5">5</label>
-        <input class="option-pitch" id="select-pitch-5" type="radio" name="pitch" value="pitch-5">
-        <label class="select-item" for="select-pitch-6">6</label>
-        <input class="option-pitch" id="select-pitch-6" type="radio" name="pitch" value="pitch-6">
-        <label class="select-item" for="select-pitch-7">7</label>
-        <input class="option-pitch" id="select-pitch-7" type="radio" name="pitch" value="pitch-7">
-        <label class="select-item" for="select-pitch-8">8</label>
-        <input class="option-pitch" id="select-pitch-8" type="radio" name="pitch" value="pitch-8">
-
-        <label class="select-item" for="select-pitch-10">10</label>
-        <input class="option-pitch" id="select-pitch-10" type="radio" name="pitch" value="pitch-10">
-    </div>
 </div>
 
 <div class="grid-pitches">   
     <div class="select-hand" data-pitch="Right">Right</div>
     <div class="select-hand" data-pitch="Left">Left</div>
-    <div id="Fastball" class="pitch-cell option-pitch" data-pitch="Fastball">Fastball</div>
-    <div id="Slider" class="pitch-cell option-pitch" data-pitch="Slider">Slider</div>
+    <div id={FASTBALL} class="pitch-cell option-pitch" data-pitch="Fastball">Fastball</div>
+    <div id={SLIDER} class="pitch-cell option-pitch" data-pitch="Slider">Slider</div>
     <div id={CHANGEUP}class="pitch-cell option-pitch" data-pitch="Change-up">Change Up</div>
-    <div id="Curve" class="pitch-cell option-pitch" data-pitch="Curve">Curve</div>
-    <div id="Spliter" class="pitch-cell option-pitch" data-pitch="Spliter">Split Finger</div>
-    <div id="TweleveSixCurve" class="pitch-cell option-pitch" data-pitch="12-6Curve">12-6 Curve</div>
+    <div id={CURVE} class="pitch-cell option-pitch" data-pitch="Curve">Curve</div>
+    <div id={SPLITER} class="pitch-cell option-pitch" data-pitch="Spliter">Split Finger</div>
+    <div id={TWELVESIXCURVE} class="pitch-cell option-pitch" data-pitch="12-6Curve">12-6 Curve</div>
     
 </div>
 
-<script>
-    const ACTIVE = 'active'
-    const CLICK = 'click'
-    const TOGGLE_CLASS = 'hidden-pitch'
-    const FASTBALL =  'Fastball'
-    const SLIDER =  'Slider'
-    const CHANGEUP =  'Change-up'
-    const CURVE =  'Curve'
-    const SPLITER =  'Spliter'
-    const TWELVESIXCURVE =  '12-6 Curve'
-    const RIGHT = 'Right'
-    const LEFT = 'Left'
+<script >
+import {CLICK, righthandClockPositions, selectOptions,convertClockPositions}  from "../../scripts/PitchSelect.js"
 
-    const pitchSelect = document.querySelectorAll('.pitch-cell');
-    const select = document.querySelector(CHANGEUP)
-    const button = document.querySelector('#button')
-    const pitchOptions = document.querySelectorAll('.option-pitch')
-    const selectLabel = document.querySelector('#select-label-pitch')
-    const selectHandedness = document.querySelectorAll('.select-hand')
+import { toggleHiddenSpeed } from "../../scripts/SpeedSelection.js";
+const pitchSelect = document.querySelectorAll('.pitch-cell');
+const button = document.querySelector('#button')
+const pitchOptions = document.querySelectorAll('.option-pitch')
+const selectLabel = document.querySelector('#select-label-pitch')
+const selectHandedness = document.querySelectorAll('.select-hand')
+
     
-    const righthandClockPositions = new Map ([
-            [ FASTBALL, 12], 
-            [ SLIDER, 3],
-            [ CHANGEUP, 8],
-            [ CURVE, 5],
-            [ SPLITER, 6],
-            [ TWELVESIXCURVE, 6 ]]
-    )
-
-    const convertClockPositions = (pitchObject) => {
-        const activeClass = document.querySelector('.select-hand.active')
-        if(activeClass==null)return
-        const hand = activeClass.innerText
-        console.log(hand)
-        if(hand == LEFT) {
-            pitchObject.set(SLIDER, 9)
-            pitchObject.set(CHANGEUP, 4)
-            pitchObject.set(CURVE, 7)
-        } 
-        if (hand == RIGHT){
-            pitchObject.set(SLIDER, 3)
-            pitchObject.set(CHANGEUP, 8)
-            pitchObject.set(CURVE, 5)
-        }
-        return pitchObject
+const setSelectTitle = (event) => {
+    const divElement = document.querySelector(`div[id="${event.target.id}"]`).textContent
+    selectLabel.innerText = divElement
     }
+    
+pitchSelect.forEach(pitch => selectOptions(pitchSelect,pitch))
+selectHandedness.forEach(hand => selectOptions(selectHandedness,hand))
 
-    const selectOptions = (array, select) => {
-        select.addEventListener(CLICK, ()=> {
-            array.forEach(selection => selection.classList.remove(ACTIVE))
-            select.classList.add(ACTIVE); 
-            console.log(select.innerText)
-        })}
-        
-    const toggleHidden = () => select.classList.toggle(TOGGLE_CLASS)
-        
-    const setSelectTitle = (event: Event) => {
-        //const labelElement = document.querySelector(`label[for="${event.target.id}"]`).innerText
-        const divElement = document.querySelector(`div[id="${event.target.id}"]`).textContent
-        selectLabel.innerText = divElement
-       
-       // console.log(labelElement)
-        }
-        
-    pitchSelect.forEach(pitch => selectOptions(pitchSelect,pitch))
-    selectHandedness.forEach(hand => selectOptions(selectHandedness,hand))
 
-    button.addEventListener(CLICK, function(event){
-        event.preventDefault()
+pitchOptions.forEach(option => {
+    option.addEventListener(CLICK, event => {
+        setSelectTitle(event)
+        toggleHiddenSpeed()
         
-        })
+    })
+})
 
-    pitchOptions.forEach(option => {
-        option.addEventListener(CLICK, event => {
-            const handselect = convertClockPositions(righthandClockPositions)
-            console.log(handselect)
-            setSelectTitle(event)}
-            )
-        })
-        
+button.addEventListener(CLICK, function(event){
+    const handselect = convertClockPositions(righthandClockPositions)
+    console.log(handselect)
+})
 </script>
 
 <style>

@@ -1,77 +1,108 @@
 ---
 
 const {title, sport} = Astro.props;
-
 export interface Props {
     title: string;
     sport: string; 
 }
 
 ---
-
-
 <div class="select-group">
     <button class="button" id="button-speed">
-        <span id="select-label-speed">  Please Select {title}</span>
+        <span id="select-label-speed">  Please Select {title} MPH</span>
     </button>
-    
-    <div id="drop-down-speed" class="drop-down-speed hidden-speed">
-        <label class="select-item" for="select-speed-25">25</label>
+   <!--  <div id="drop-down-speed" class="drop-down-speed hidden-speed">
+        <label class="select-item" for="select-speed-25">50 MPH</label>
         <input class="speed-option" id="select-speed-25" type="radio" name="speed" value="speed-25">
-        <label class="select-item" for="select-speed-30">30</label>
+        <label class="select-item" for="select-speed-30">60 MPH</label>
         <input class="speed-option" id="select-speed-30" type="radio" name="speed" value="speed-30">
-        <label class="select-item" for="select-speed-35">35</label>
+        <label class="select-item" for="select-speed-35">70 MPH</label>
         <input class="speed-option" id="select-speed-35" type="radio" name="speed" value="speed-35">
-        <label class="select-item" for="select-speed-40">40</label>
+        <label class="select-item" for="select-speed-40">80 MPH</label>
         <input class="speed-option" id="select-speed-40" type="radio" name="speed" value="speed-40">
-        <label class="select-item" for="select-speed-45">45</label>
+        <label class="select-item" for="select-speed-45">90 MPH</label>
         <input class="speed-option" id="select-speed-45" type="radio" name="speed" value="speed-45">
-        <label class="select-item" for="select-speed-50">50</label>
+        <label class="select-item" for="select-speed-50">100 MPH</label>
         <input class="speed-option" id="select-speed-50" type="radio" name="speed" value="speed-50">
-        <label class="select-item" for="select-speed-55">55</label>
+        <label class="select-item" for="select-speed-55">110 MPH</label>
         <input class="speed-option" id="select-speed-55" type="radio" name="speed" value="speed-55">
-        <label class="select-item" for="select-speed-60">60</label>
+        <label class="select-item" for="select-speed-60">120 MPH</label>
         <input class="speed-option" id="select-speed-60" type="radio" name="speed" value="speed-60">
-        <label class="select-item" for="select-speed-65">65</label>
-        <input class="speed-option" id="select-speed-65" type="radio" name="speed" value="speed-65">
+    </div>
+-->
+<div id="grid-fastball-speed" class="">
+    <div class="grid">
+        <div id="fast-70" class="grid-content speed-option">
+            70
+        </div>
+        <div id="fast-80" class="grid-content speed-option">
+            80
+        </div>
+        <div id="fast-90" class="grid-content speed-option">
+           90 
+        </div>
+        <div id="fast-100" class="grid-content speed-option">
+            100 
+        </div>
+        <div id="fast-110" class="grid-content speed-option">
+            110
+        </div>
+        <div id="fast-120" class="grid-content speed-option">
+            120
+        </div>
     </div>
 </div>
-
+<div id="grid-offspeed" class="hidden-speed">
+    <div class="grid">
+        <div id="off-50" class="grid-content speed-option">
+            50
+        </div>
+        <div id="off-60"class="grid-content speed-option">
+            60
+        </div>
+        <div id="off-70" class="grid-content speed-option">
+           70 
+        </div>
+        <div id="off-80" class="grid-content speed-option">
+            80 
+        </div>
+        <div id="off-90" class="grid-content speed-option">
+            90
+        </div>
+        <div id="off-100" class="grid-content speed-option">
+            100
+        </div>
+    </div>
+</div>
+</div>
 <script>
-    
-    const buttonSpeed = document.querySelector('#button-speed')
+    import * as PitchSelect  from "../../scripts/PitchSelect.js"
+    import * as Speed  from "../../scripts/SpeedSelection.js"
 
+    var pitchtype = PitchSelect.convertClockPositions(PitchSelect.righthandClockPositions)
 
-    const select = document.querySelector('#drop-down-speed')
+    Speed.speedOptions.forEach(speed => PitchSelect.selectOptions(Speed.speedOptions,speed))
 
-
-    const speedOptions = document.querySelectorAll('.speed-option')
-    
-    
-    const selectLabel = document.querySelector('#select-label-speed')
-
-    buttonSpeed.addEventListener('click', function(event){
+    Speed.buttonSpeed.addEventListener('click', function(event){
         event.preventDefault()
-        toggleHiddenSpeed()
-
+        console.log(Speed.speedOptions)
     })
-
-    function toggleHiddenSpeed(){
-        select.classList.toggle('hidden-speed')
-    }
     
-    speedOptions.forEach(function(speedOption){
+    Speed.speedOptions.forEach(function(speedOption){
         speedOption.addEventListener('click',
         function(event){
             setSelectTitleSpeed(event)            
         })
     })
     function setSelectTitleSpeed(event){
-        const labelElement = document.querySelector(`label[for="${event.target.id}"]`).innerText
-        console.log(labelElement)
-        selectLabel.innerText = labelElement;
-        toggleHiddenSpeed()
+
+        const divElement = document.querySelector(`div[id="${event.target.id}"]`).innerText
+        console.log(event, divElement)
+        Speed.selectLabel.innerText = divElement;
+        
     }
+
+
 
 </script>
 
@@ -95,6 +126,7 @@ export interface Props {
         position: absolute;
         width: 100%;
         box-sizing: border-box;
+        z-index: 1;
 
     }
     .select-item{
@@ -139,12 +171,37 @@ export interface Props {
 	.button:is(:hover, :focus-within) h2 {
 		color: rgb(var(--accent));
 	}
-	
+	.grid-content{
+        list-style: none;
+		display: flex;
+		padding: 0.25rem;
+		background-color: white;
+		background-image: none;
+		background-size: 400%;
+		border-radius: 0.6rem;
+		background-position: 100%;
+		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        justify-content: center;
+    }
+    .grid{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        position: relative;
+        gap: 1rem;
+        max-width: fit-content;
+        margin-top: 1rem;
+    }
+    .grid-content:hover{
+        background-color: #b6b6f9;
+    }
    
-      /* The container <div> - needed to position the dropdown content */
     .dropdown {
         position: absolute;
       }
+    .active{
+        background-color: #3e8e41;
+    }
       
     
 </style>

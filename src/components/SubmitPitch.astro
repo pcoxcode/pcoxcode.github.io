@@ -2,10 +2,12 @@
 import PitchSubmitButton from './SubmitButtons/PitchSubmitButton.astro';
 import ZoneSubmitButton from './SubmitButtons/ZoneSubmitButton.astro';
 import SpeedSubmitButton from './SubmitButtons/SpeedSubmitButton.astro';
-import DynamicSubmitButton from './SubmitButtons/DynamicSubmitButton.astro';
+import DynamicSubmitButton from './SubmitButtons/DynamicSubmitButton.astro'
+import {convertClockPositions, righthandClockPositions} from "../scripts/PitchSelect.js"
 
 const dynamicZone = [1,2,3,4,5,6,7,8,9];
 const pitchOptions = [12,2,3,4,5,6,7,8,9,10];
+
 
 export interface Props {
     title: string; 
@@ -36,7 +38,12 @@ const {title, button} = Astro.props;
             </div>
             <div class="div-content Pitch">
                 <div id="pitch">
-                    <PitchSubmitButton title="Pitch" sport="Baseball"/>
+                    <PitchSubmitButton title="Pitch" sport="Baseball"  />
+                </div>
+            </div>
+            <div class="div-content Pitch">
+                <div id="pitch">
+                    <DynamicSubmitButton array={dynamicZone} sport="Baseball"  />
                 </div>
             </div>
             <div class="div-content Add">
@@ -44,7 +51,6 @@ const {title, button} = Astro.props;
                     +
                 </div>
             </div>
-
         </div>
     </div>
     
@@ -73,6 +79,8 @@ const {title, button} = Astro.props;
 
 
 <script >
+import {convertClockPositions, righthandClockPositions} from "../scripts/PitchSelect.js"
+
 var pitch = []; 
 var speed = []; 
 var zone = []; 
@@ -85,6 +93,10 @@ var button2 = document.querySelector('#btn2');
 button.addEventListener('click', ()=>{
     addToTable()
     removeTableRow()
+})
+button2.addEventListener('click', ()=>{
+ let handSelect = convertClockPositions(righthandClockPositions)
+ console.log(handSelect)
 })
 
 
@@ -100,7 +112,6 @@ function addToTable(){
     
     var speedSubmission = parseInt(document.getElementById('speed').innerText);
     var zoneSubmission= parseInt(document.getElementById('zone').innerText);
-    //var dynamicSubmission = parseInt(document.getElementById('dynamic-sub-btn').innerText)
     console.table([pitchSlice,speedSubmission,zoneSubmission]);
     
     if(pitchSubmission && speedSubmission && zoneSubmission){
@@ -170,6 +181,7 @@ const dataTable = document.getElementById("dataTable");
 const btnExportToCsv = document.getElementById("btnExportToCsv");
 
         btnExportToCsv.addEventListener("click", () => {
+            console.log(dataTable)
             const exporter = new TableCSVExporter(dataTable);
             const csvOutput = exporter.convertToCSV();
             const filteredOutput = filterCSV(csvOutput);
@@ -187,7 +199,20 @@ const btnExportToCsv = document.getElementById("btnExportToCsv");
         });
 
 const filterCSV = (csv) =>{
-    let filteredString = csv.replace('Pitch', 'Deflector Position');
+    let filteredString = csv.replace('Pitch', 'Deflector Position')
+    .replaceAll('50', '25')
+    .replaceAll('Curve','5')
+    .replaceAll('Fastball','12')
+
+    let row = csv.replace('Pitch', 'Deflector Position').split('\n')
+    let arrayCsv = []
+    for( let i= 0; i < row.length;i++){
+        let cells = row[i].split(',')
+        arrayCsv.push([cells])   
+    }
+    console.log(arrayCsv)
+    
+
     return filteredString
 }
 
@@ -246,7 +271,10 @@ class TableCSVExporter {
 
 
 <style>
-
+h3 {
+    display: flex;
+    justify-content: center;
+}
 .parent{
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
@@ -269,6 +297,7 @@ class TableCSVExporter {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: minmax(100px);
     column-gap: 2%;
+    justify-items: center;
     text-align: center;
     
 }

@@ -18,52 +18,49 @@ export interface Props {
     </button>
     <div class="grid-buttons">
 
-    
     <div class="grid-row">
-        <div class="grid-cell select-zone-1">
-            <label class="select-item" for="select-zone-1">1</label>
-            <input class="option-zone" id="select-zone-1" type="radio" name="zone" value="zone-1">
+        <div class="grid-cell option-zone" id="select-zone-1">
+            1
         </div>
-        <div class="grid-cell">
-            <label class="select-item" for="select-zone-2">2</label>
-            <input class="option-zone" id="select-zone-2" type="radio" name="zone" value="zone-2">
+        <div class="grid-cell option-zone" id="select-zone-2">
+            2
         </div>
-        <div class="grid-cell">
-            <label class="select-item" for="select-zone-3">3</label>
-            <input class="option-zone" id="select-zone-3" type="radio" name="zone" value="zone-3"> 
+        <div class="grid-cell option-zone"id="select-zone-3">
+            3
         </div>
     </div>
     <div class="grid-row">
-        <div class="grid-cell">
-            <label class="select-item" for="select-zone-4">4</label>
-            <input class="option-zone" id="select-zone-4" type="radio" name="zone" value="zone-4"></div>
-        <div class="grid-cell">
-            <label class="select-item" for="select-zone-5">5</label>
-            <input class="option-zone" id="select-zone-5" type="radio" name="zone" value="zone-5"></div>
-        <div class="grid-cell">
-            <label class="select-item" for="select-zone-6">6</label>
-            <input class="option-zone" id="select-zone-6" type="radio" name="zone" value="zone-6"></div>
+        <div class="grid-cell option-zone"id="select-zone-4">
+            4
+        </div>
+        <div class="grid-cell option-zone"id="select-zone-5">
+            5
+        </div>
+        <div class="grid-cell option-zone"id="select-zone-6">
+            6
+        </div>
     </div>
     <div class="grid-row">
-        <div class="grid-cell">
-            <label class="select-item" for="select-zone-7">7</label>
-            <input class="option-zone" id="select-zone-7" type="radio" name="zone" value="zone-7"></div>
-        <div class="grid-cell">
-            <label class="select-item" for="select-zone-8">8</label>
-            <input class="option-zone" id="select-zone-8" type="radio" name="zone" value="zone-8"></div>
-        <div class="grid-cell">
-            <label class="select-item" for="select-zone-9">9</label>
-            <input class="option-zone" id="select-zone-9" type="radio" name="zone" value="zone-9"></div>
+        <div class="grid-cell option-zone"id="select-zone-7">
+            7
+        </div>
+        <div class="grid-cell option-zone"id="select-zone-8">
+           8
+        </div>
+        <div class="grid-cell option-zone"id="select-zone-9">
+            9
+        </div>
     </div>
     </div>
 
 </div>
 
 <script>
-    
+    import * as PitchSelect  from "../../scripts/PitchSelect.js"
     const zoneOptions = document.querySelectorAll('.option-zone')
     const selectLabelZone = document.querySelector('#select-label-zone')
 
+    zoneOptions.forEach(zone => PitchSelect.selectOptions(zoneOptions,zone))
     
     zoneOptions.forEach(function(option){
         option.addEventListener('click',
@@ -72,9 +69,8 @@ export interface Props {
         })
     })
     function setSelectTitleZone(event){
-        const labelElement = document.querySelector(`label[for="${event.target.id}"]`).innerText
-        console.log(labelElement)
-        selectLabelZone.innerText = labelElement;
+        const divElement = document.querySelector(`div[id="${event.target.id}"]`).innerText
+        selectLabelZone.innerText = divElement
     }
 
 </script>
@@ -117,7 +113,7 @@ export interface Props {
     .section{
         list-style: none;
 		display: flex;
-		padding: 0.25rem;
+		padding: 0.5rem;
 		background-color: white;
 		background-image: none;
 		background-size: 400%;
@@ -151,7 +147,8 @@ export interface Props {
     .grid-cell{
         grid-row: inherit;
         list-style: none;
-		padding: 0.25rem;
+        display: block;
+        padding: 1rem 0 0.5rem;
 		background-color: white;
 		background-image: none;
 		background-size: 50%;
@@ -163,6 +160,9 @@ export interface Props {
    .grid-buttons{
         margin-top: 5%;
    }
+   .active{
+        background-color: #3e8e41;
+    }
     .grid-row{
     
     display: grid;
