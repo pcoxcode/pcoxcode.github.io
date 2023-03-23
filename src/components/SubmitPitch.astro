@@ -5,7 +5,7 @@ import SpeedSubmitButton from './SubmitButtons/SpeedSubmitButton.astro';
 import DynamicSubmitButton from './SubmitButtons/DynamicSubmitButton.astro'
 import {convertClockPositions, rightHandClockPositions} from "../scripts/PitchSelect.js"
 
-const dynamicZone = [1,2,3,4,5,6,7,8,9];
+const dynamicZone = [2,3,4,5,6,7,8,9,10];
 const pitchOptions = [12,2,3,4,5,6,7,8,9,10];
 
 
@@ -26,29 +26,44 @@ const {title, button} = Astro.props;
     <div class="sub-box">
         
         <div class="grid">
-            <div class="div-content zone">
-                <div id="zone">
-                    <ZoneSubmitButton title="Zone" sport="Baseball" />
+            <div>
+                ZONE
+                <div class="div-content zone">
+                    <div id="zone">
+                        <ZoneSubmitButton title="Zone" sport="Baseball" />
+                    </div>
                 </div>
             </div>
-            <div class="div-content speed">
-                <div id="speed">
-                    <SpeedSubmitButton title="Speed" sport="Baseball" />
+            <div>
+                SPEED
+                <div class="div-content speed">
+                    <div id="speed">
+                        <SpeedSubmitButton title="Speed" sport="Baseball" />
+                    </div>
                 </div>
             </div>
-            <div class="div-content Pitch">
-                <div id="pitch">
-                    <PitchSubmitButton title="Pitch" sport="Baseball"  />
+            <div>
+                PITCH
+                <div class="div-content Pitch">
+                    <div id="pitch">
+                        <PitchSubmitButton title="Pitch" sport="Baseball"  />
+                    </div>
                 </div>
             </div>
-            <div class="div-content Pitch">
-                <div id="delay">
-                    <DynamicSubmitButton array={dynamicZone} title="Pitch Delay in Seconds" sport="Baseball"  />
+            <div>
+                DELAY
+                <div class="div-content Pitch">
+                    <div id="delay">
+                        <DynamicSubmitButton array={dynamicZone} title="Pitch Delay in Seconds" sport="Baseball"  />
+                    </div>
                 </div>
             </div>
-            <div class="div-content Add">
-                <div class="btn" id="btn1">
-                    +
+            <div>
+                ADD PITCH
+                <div class="div-content Add">
+                    <div class="btn" id="btn1">
+                        +
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,6 +125,9 @@ function addToTable(){
     var pitchSubmission = document.getElementById('pitch').innerText;
     var pitchFilter = pitchSubmission.indexOf('\n')
     var pitchSlice = pitchSubmission.slice(0,pitchFilter)
+    if( pitchSlice == 'Please Select Pitch'){
+        pitchSlice = FASTBALL
+    }
     
     var speedSubmission = parseInt(document.getElementById('speed').innerText);
     var zoneSubmission= parseInt(document.getElementById('zone').innerText);
@@ -340,7 +358,7 @@ h3 {
 
 .grid{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: minmax(100px);
     column-gap: 2%;
     justify-items: center;
