@@ -42,8 +42,8 @@ const {title, button} = Astro.props;
                 </div>
             </div>
             <div class="div-content Pitch">
-                <div id="pitch">
-                    <DynamicSubmitButton array={dynamicZone} sport="Baseball"  />
+                <div id="delay">
+                    <DynamicSubmitButton array={dynamicZone} title="Pitch Delay in Seconds" sport="Baseball"  />
                 </div>
             </div>
             <div class="div-content Add">
@@ -89,6 +89,7 @@ var pitch = [];
 var speed = []; 
 var zone = []; 
 var index = [];
+var delay = []
 var c = 1;
 
 var button = document.querySelector('#btn1');
@@ -112,13 +113,15 @@ function addToTable(){
     
     var speedSubmission = parseInt(document.getElementById('speed').innerText);
     var zoneSubmission= parseInt(document.getElementById('zone').innerText);
+    var delaySubmission= parseInt(document.getElementById('delay').innerText);
     //console.table([pitchSlice,speedSubmission,zoneSubmission]);
     
-    if(pitchSubmission && speedSubmission && zoneSubmission && pitchHand){
+    if(pitchSubmission && speedSubmission && zoneSubmission && pitchHand && delaySubmission){
         hand = [...hand, pitchHand];
         pitch = [...pitch,pitchSlice];
         speed = [...speed,speedSubmission];
         zone = [...zone,zoneSubmission];
+        delay = [...delay,delaySubmission]
         index = [...index,c];
         displayTable();
     }
@@ -157,7 +160,7 @@ function displayTable(){
         tr.appendChild(td4);
         
         var td5 = document.createElement('td')
-        td5.innerHTML = '5'
+        td5.innerHTML = delay[i]
         tr.appendChild(td5)
         
         var td6 = document.createElement('td')
@@ -337,7 +340,7 @@ h3 {
 
 .grid{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: minmax(100px);
     column-gap: 2%;
     justify-items: center;
