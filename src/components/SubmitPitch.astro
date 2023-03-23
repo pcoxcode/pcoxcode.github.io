@@ -3,7 +3,7 @@ import PitchSubmitButton from './SubmitButtons/PitchSubmitButton.astro';
 import ZoneSubmitButton from './SubmitButtons/ZoneSubmitButton.astro';
 import SpeedSubmitButton from './SubmitButtons/SpeedSubmitButton.astro';
 import DynamicSubmitButton from './SubmitButtons/DynamicSubmitButton.astro'
-import {convertClockPositions, righthandClockPositions} from "../scripts/PitchSelect.js"
+import {convertClockPositions, rightHandClockPositions} from "../scripts/PitchSelect.js"
 
 const dynamicZone = [1,2,3,4,5,6,7,8,9];
 const pitchOptions = [12,2,3,4,5,6,7,8,9,10];
@@ -61,6 +61,7 @@ const {title, button} = Astro.props;
         <thead>
             <tr>
                 <th>P. No.</th>
+                <th>Hand</th>
                 <th>Zone</th>
                 <th>Speed</th>
                 <th>Pitch</th>
@@ -79,8 +80,11 @@ const {title, button} = Astro.props;
 
 
 <script >
-import {convertClockPositions, righthandClockPositions} from "../scripts/PitchSelect.js"
+import {rightHandClockPositions, fastballSpeeds, RIGHT, FASTBALL, leftHandClockPositions, offspeedSpeeds, crossoverSwitch } from "../scripts/PitchSelect.js"
 
+import { handSelection } from "../scripts/SpeedSelection.js";
+
+var hand = [];
 var pitch = []; 
 var speed = []; 
 var zone = []; 
@@ -88,37 +92,34 @@ var index = [];
 var c = 1;
 
 var button = document.querySelector('#btn1');
-var button2 = document.querySelector('#btn2');
+
 
 button.addEventListener('click', ()=>{
     addToTable()
     removeTableRow()
 })
-button2.addEventListener('click', ()=>{
- let handSelect = convertClockPositions(righthandClockPositions)
- console.log(handSelect)
-})
-
-
 
 
 function addToTable(){
     
     document.getElementById('no-data').style.display="none";
     
+    var pitchHand = document.getElementsByClassName('select-hand active')[0].textContent
+
     var pitchSubmission = document.getElementById('pitch').innerText;
     var pitchFilter = pitchSubmission.indexOf('\n')
     var pitchSlice = pitchSubmission.slice(0,pitchFilter)
     
     var speedSubmission = parseInt(document.getElementById('speed').innerText);
     var zoneSubmission= parseInt(document.getElementById('zone').innerText);
-    console.table([pitchSlice,speedSubmission,zoneSubmission]);
+    //console.table([pitchSlice,speedSubmission,zoneSubmission]);
     
-    if(pitchSubmission && speedSubmission && zoneSubmission){
-        pitch= [...pitch,pitchSlice];
-        speed= [...speed,speedSubmission];
-        zone= [...zone,zoneSubmission];
-        index= [...index,c];
+    if(pitchSubmission && speedSubmission && zoneSubmission && pitchHand){
+        hand = [...hand, pitchHand];
+        pitch = [...pitch,pitchSlice];
+        speed = [...speed,speedSubmission];
+        zone = [...zone,zoneSubmission];
+        index = [...index,c];
         displayTable();
     }
     else{
@@ -134,33 +135,38 @@ function displayTable(){
     
     for(var i=0;i<length;i++){
         tr.id = `row-${i}`
-        tr.innerHTML='';
-        var td1= document.createElement('td');
-        td1.innerHTML= index[i];
+        tr.innerHTML ='';
+        var td1 = document.createElement('td');
+        td1.innerHTML = index[i];
         tr.appendChild(td1);
         
-        var td2= document.createElement('td');
-        td2.innerHTML= zone[i];
+        var td7= document.createElement('td')
+        td7.innerHTML = hand[i]
+        tr.appendChild(td7)
+        
+        var td2 = document.createElement('td');
+        td2.innerHTML = zone[i];
         tr.appendChild(td2);
         
-        var td3= document.createElement('td');
-        td3.innerHTML= speed[i];
+        var td3 = document.createElement('td');
+        td3.innerHTML = speed[i];
         tr.appendChild(td3);
         
-        var td4= document.createElement('td');
-        td4.innerHTML= pitch[i];
+        var td4 = document.createElement('td');
+        td4.innerHTML = pitch[i];
         tr.appendChild(td4);
         
-        var td5= document.createElement('td')
-        td5.innerHTML ='5'
+        var td5 = document.createElement('td')
+        td5.innerHTML = '5'
         tr.appendChild(td5)
         
         var td6 = document.createElement('td')
         td6.innerHTML = `<button id="remove-${i}""> X </button>`
         td6.classList.add('remove')
-        td6.style.backgroundColor ='gray'
+        td6.style.backgroundColor = 'gray'
         tr.appendChild(td6)
-        
+
+
         document.getElementsByTagName('tbody')[0].appendChild(tr);
     }
     c++;
@@ -180,11 +186,12 @@ const removeTableRow = () => {
 const dataTable = document.getElementById("dataTable");
 const btnExportToCsv = document.getElementById("btnExportToCsv");
 
-        btnExportToCsv.addEventListener("click", () => {
-            console.log(dataTable)
+btnExportToCsv.addEventListener("click", () => {
             const exporter = new TableCSVExporter(dataTable);
+
             const csvOutput = exporter.convertToCSV();
-            const filteredOutput = filterCSV(csvOutput);
+            const filteredOutput = filterCSV(csvOutput, rightHandClockPositions);
+            console.log(filteredOutput)
             const csvBlob = new Blob([filteredOutput], { type: "text/csv" });
             const blobUrl = URL.createObjectURL(csvBlob);
             const anchorElement = document.createElement("a");
@@ -192,28 +199,64 @@ const btnExportToCsv = document.getElementById("btnExportToCsv");
             anchorElement.href = blobUrl;
             anchorElement.download = "table-export.csv";
             anchorElement.click();
-
+            
             setTimeout(() => {
                 URL.revokeObjectURL(blobUrl);
             }, 500);
         });
 
-const filterCSV = (csv) =>{
-    let filteredString = csv.replace('Pitch', 'Deflector Position')
-    .replaceAll('50', '25')
-    .replaceAll('Curve','5')
-    .replaceAll('Fastball','12')
 
+
+const isArray = (value) => {
+    if(value === null) return false
+    return (typeof value ==='object')
+}
+const objectProps = (object, pitch) => {
+    
+    //let speedCheck = checkSpeed(object[3])
+    //let clockPositions = convertClockPositions(rightHandClockPositions, object[0])
+
+    let speedFilter = crossoverSwitch(object[3], FASTBALL, offspeedSpeeds, fastballSpeeds)
+    let clockFilter = crossoverSwitch(object[0], RIGHT, leftHandClockPositions, rightHandClockPositions)
+
+    for(let value in object ){
+        if (isArray(object[value])){
+            objectProps(object[value],pitch) 
+        } else {
+            if(clockFilter.has(object[value]) ){
+                object[value] = clockFilter.get(object[value])               
+            }
+            if(speedFilter.has(object[value])){
+                object[value] = speedFilter.get(object[value])
+            } 
+            //console.log(value, object[value])
+        }
+    }
+
+    return object
+}
+
+const filterCSV = (csv, pitch) =>{
+    let filteredString = csv.replace('Pitch', 'Deflector Position')
     let row = csv.replace('Pitch', 'Deflector Position').split('\n')
     let arrayCsv = []
     for( let i= 0; i < row.length;i++){
         let cells = row[i].split(',')
-        arrayCsv.push([cells])   
+        arrayCsv.push(cells)   
     }
-    console.log(arrayCsv)
-    
+   let newArray = objectProps(arrayCsv,pitch)
+   console.log(newArray)
+   let newNewArray = []
 
-    return filteredString
+   newArray.forEach( element => {
+    newNewArray = [...newNewArray,element.slice(1)]
+    console.log(element)}
+   )
+    console.log('NEWNEW',newNewArray)
+    let myPeople = newNewArray.join('\n')
+    console.log(myPeople)
+   
+    return myPeople
 }
 
 class TableCSVExporter {

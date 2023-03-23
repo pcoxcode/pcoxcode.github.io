@@ -22,13 +22,13 @@ const {title, sport} = Astro.props;
     <div id={SLIDER} class="pitch-cell option-pitch" data-pitch="Slider">Slider</div>
     <div id={CHANGEUP}class="pitch-cell option-pitch" data-pitch="Change-up">Change Up</div>
     <div id={CURVE} class="pitch-cell option-pitch" data-pitch="Curve">Curve</div>
-    <div id={SPLITER} class="pitch-cell option-pitch" data-pitch="Spliter">Split Finger</div>
+    <div id={SPLITER} class="pitch-cell option-pitch" data-pitch="Spliter">Spliter</div>
     <div id={TWELVESIXCURVE} class="pitch-cell option-pitch" data-pitch="12-6Curve">12-6 Curve</div>
     
 </div>
 
 <script >
-import {CLICK, righthandClockPositions, selectOptions,convertClockPositions}  from "../../scripts/PitchSelect.js"
+import {CLICK, rightHandClockPositions, selectOptions,convertClockPositions}  from "../../scripts/PitchSelect.js"
 
 import { toggleHiddenSpeed } from "../../scripts/SpeedSelection.js";
 const pitchSelect = document.querySelectorAll('.pitch-cell');
@@ -56,7 +56,7 @@ pitchOptions.forEach(option => {
 })
 
 button.addEventListener(CLICK, function(event){
-    const handselect = convertClockPositions(righthandClockPositions)
+    const handselect = convertClockPositions(rightHandClockPositions)
     console.log(handselect)
 })
 </script>

@@ -7,14 +7,14 @@ export const CLICK = 'pointerdown'
 export const TOGGLE_CLASS = 'hidden-pitch'
 export const FASTBALL =  'Fastball'
 export const SLIDER =  'Slider'
-export const CHANGEUP =  'Change-up'
+export const CHANGEUP =  'Change Up'
 export const CURVE =  'Curve'
 export const SPLITER =  'Spliter'
 export const TWELVESIXCURVE =  '12-6 Curve'
 export const RIGHT = 'Right'
 export const LEFT = 'Left'
 
-export const righthandClockPositions = new Map ([
+export const rightHandClockPositions = new Map ([
     [ FASTBALL, 12], 
     [ SLIDER, 3],
     [ CHANGEUP, 8],
@@ -23,28 +23,44 @@ export const righthandClockPositions = new Map ([
     [ TWELVESIXCURVE, 6 ]]
 )
 
+export const leftHandClockPositions = new Map ([
+    [ FASTBALL, 12], 
+    [ SLIDER, 9],
+    [ CHANGEUP, 4],
+    [ CURVE, 7],
+    [ SPLITER, 6],
+    [ TWELVESIXCURVE, 6 ]]
+)
+
 export const fastballSpeeds = new Map ([
-    [ '25', 70], 
-    [ '30', 80],
-    [ '35', 85],
-    [ '40', 90],
-    [ '45', 95],
-    [ '50', 100 ],
-    [ '55', 105 ],
-    [ '60', 115 ],
-    [ '65', 120 ]]
+    [ '50', '25'], 
+    [ '60', '30'],
+    [ '70' ,'25'], 
+    [ '80' ,'30'],
+    [ '90' ,'35'],
+    [ '95' ,'40'],
+    [ '100' ,'45'],
+    [ '105' ,'50'],
+    [ '110' ,'55'],
+    [ '115' ,'60'],
+    [ '120' ,'65']]
 )
 
 export const offspeedSpeeds = new Map ([
-    [ '25', 50], 
-    [ '30', 60],
-    [ '35', 65],
-    [ '40', 70],
-    [ '45', 75],
-    [ '50', 80 ],
-    [ '55', 85 ],
-    [ '60', 95 ],
-    [ '65', 100 ]]
+    [ '50', '25'], 
+    [ '60', '30'],
+    [ '65', '35'],
+    [ '70', '40'],
+    [ '75', '45'],
+    [ '80', '50'],
+    [ '85', '55'],
+    [ '95', '60'],
+    [ '100', '65'],
+    [ '110' ,'65'],
+    [ '115' ,'65'],
+    [ '120' ,'65']
+
+]
 )
 export const selectOptions = (array, select) => {
     select.addEventListener(CLICK, ()=> {
@@ -53,27 +69,34 @@ export const selectOptions = (array, select) => {
         console.log(select.innerText)
     })}
 
+export const checkSpeed = (speedSet) => {
+   if (speedSet == null) return 
+   if (speedSet != FASTBALL) return offspeedSpeeds
+   return fastballSpeeds
+}
 
+export const crossoverSwitch = (item, trigger, oppositeOption, option) => {
+    if( item == null) return
+    if( item != trigger) return oppositeOption
+    return option
+}
 
 export let handedness = atom('STATE MANAGE')
     
-export const convertClockPositions = (pitchObject) => {
-        const activeClass = document.querySelector('.select-hand.active')
-        if(activeClass==null)return
-        const hand = activeClass.innerText
+export const convertClockPositions = (pitchObject, handselect) => {
+        if(handselect==null)return
+        const hand = handselect
         if(hand == LEFT) {
             handedness.set(LEFT)
             pitchObject.set(SLIDER, 9)
             pitchObject.set(CHANGEUP, 4)
             pitchObject.set(CURVE, 7)
-            console.log(handedness)
         } 
         if (hand == RIGHT){
             handedness.set(RIGHT)
             pitchObject.set(SLIDER, 3)
             pitchObject.set(CHANGEUP, 8)
             pitchObject.set(CURVE, 5)
-            console.log(handedness)
         }
         return pitchObject
     }
