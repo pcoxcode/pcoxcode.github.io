@@ -11,25 +11,7 @@ export interface Props {
     <button class="button" id="button-speed">
         <span id="select-label-speed">  Please Select {title} MPH</span>
     </button>
-   <!--  <div id="drop-down-speed" class="drop-down-speed hidden-speed">
-        <label class="select-item" for="select-speed-25">50 MPH</label>
-        <input class="speed-option" id="select-speed-25" type="radio" name="speed" value="speed-25">
-        <label class="select-item" for="select-speed-30">60 MPH</label>
-        <input class="speed-option" id="select-speed-30" type="radio" name="speed" value="speed-30">
-        <label class="select-item" for="select-speed-35">70 MPH</label>
-        <input class="speed-option" id="select-speed-35" type="radio" name="speed" value="speed-35">
-        <label class="select-item" for="select-speed-40">80 MPH</label>
-        <input class="speed-option" id="select-speed-40" type="radio" name="speed" value="speed-40">
-        <label class="select-item" for="select-speed-45">90 MPH</label>
-        <input class="speed-option" id="select-speed-45" type="radio" name="speed" value="speed-45">
-        <label class="select-item" for="select-speed-50">100 MPH</label>
-        <input class="speed-option" id="select-speed-50" type="radio" name="speed" value="speed-50">
-        <label class="select-item" for="select-speed-55">110 MPH</label>
-        <input class="speed-option" id="select-speed-55" type="radio" name="speed" value="speed-55">
-        <label class="select-item" for="select-speed-60">120 MPH</label>
-        <input class="speed-option" id="select-speed-60" type="radio" name="speed" value="speed-60">
-    </div>
--->
+
 <div id="grid-fastball-speed" class="">
     <div class="grid">
         <div id="fast-70" class="grid-content speed-option">
@@ -79,7 +61,6 @@ export interface Props {
     import * as PitchSelect  from "../../scripts/PitchSelect.js"
     import * as Speed  from "../../scripts/SpeedSelection.js"
 
-    var pitchtype = PitchSelect.convertClockPositions(PitchSelect.righthandClockPositions)
 
     Speed.speedOptions.forEach(speed => PitchSelect.selectOptions(Speed.speedOptions,speed))
 
@@ -97,7 +78,6 @@ export interface Props {
     function setSelectTitleSpeed(event){
 
         const divElement = document.querySelector(`div[id="${event.target.id}"]`).innerText
-        //console.log(event, divElement)
         Speed.selectLabel.innerText = divElement;
         
     }
@@ -183,13 +163,14 @@ export interface Props {
 		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
         justify-content: center;
+        min-width: fit-content;
     }
     .grid{
         display: grid;
         grid-template-columns: repeat(2,1fr);
         position: relative;
         gap: 1rem;
-        max-width: fit-content;
+        min-width: fit-content;
         margin-top: 1rem;
     }
     .grid-content:hover{
