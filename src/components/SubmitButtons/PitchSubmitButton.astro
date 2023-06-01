@@ -15,9 +15,13 @@ const {title, sport} = Astro.props;
     </button>
 </div>
 
-<div class="grid-pitches">   
+<div class="grid-pitches">  
+    <div>Select</div>
+    <div> Pitch Hand</div> 
     <div class="select-hand" data-pitch="Right">Right</div>
     <div class="select-hand" data-pitch="Left">Left</div>
+    <div>-----</div>
+    <div>-----</div>
     <div id={FASTBALL} class="pitch-cell option-pitch" data-pitch="Fastball">Fastball</div>
     <div id={SLIDER} class="pitch-cell option-pitch" data-pitch="Slider">Slider</div>
     <div id={CHANGEUP}class="pitch-cell option-pitch" data-pitch="Change-up">Change Up</div>
