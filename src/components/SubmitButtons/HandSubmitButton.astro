@@ -1,5 +1,5 @@
 ---
-import {FASTBALL, CHANGEUP, SLIDER, SPLITER,CURVE,TWELVESIXCURVE } from "../../scripts/PitchSelect.js"
+import {RIGHT,LEFT } from "../../scripts/PitchSelect.js"
 
 export interface Props {
     title: string;
@@ -11,47 +11,39 @@ const {title, sport} = Astro.props;
 
 <div class="select-group">
     <button class="button" id="button">
-        <span id="select-label-pitch">  Please Select {title}</span>
+        <span id="select-label-hand">  Please Select {title}</span>
     </button>
 </div>
 
 <div class="grid-pitches">  
-    <div id={FASTBALL} class="pitch-cell option-pitch" data-pitch="Fastball">Fastball</div>
-    <div id={SLIDER} class="pitch-cell option-pitch" data-pitch="Slider">Slider</div>
-    <div id={CHANGEUP}class="pitch-cell option-pitch" data-pitch="Change-up">Change Up</div>
-    <div id={CURVE} class="pitch-cell option-pitch" data-pitch="Curve">Curve</div>
-    <div id={SPLITER} class="pitch-cell option-pitch" data-pitch="Spliter">Spliter</div>
-    <div id={TWELVESIXCURVE} class="pitch-cell option-pitch" data-pitch="12-6Curve">12-6 Curve</div>
-    
+    <div id={RIGHT} class="select-hand option-hand" data-pitch="Right">Right</div>
+    <div id={LEFT} class="select-hand option-hand" data-pitch="Left">Left</div>
 </div>
 
 <script >
 import {CLICK, rightHandClockPositions, selectOptions,convertClockPositions}  from "../../scripts/PitchSelect.js"
 
-import { toggleHiddenSpeed } from "../../scripts/SpeedSelection.js";
-const pitchSelect = document.querySelectorAll('.pitch-cell');
-const button = document.querySelector('#button')
-const pitchOptions = document.querySelectorAll('.option-pitch')
-const selectLabel = document.querySelector('#select-label-pitch')
-const selectHandedness = document.querySelectorAll('.select-hand')
 
-    
+const button = document.querySelector('#button')
+
+const selectHandedness = document.querySelectorAll('.select-hand')
+const selectLabel = document.querySelector('#select-label-hand')
+const handOptions = document.querySelectorAll('.option-hand')
+
 const setSelectTitle = (event) => {
     const divElement = document.querySelector(`div[id="${event.target.id}"]`).textContent
     selectLabel.innerText = divElement
-    }
-    
-pitchSelect.forEach(pitch => selectOptions(pitchSelect,pitch))
+    }    
+  
+
 selectHandedness.forEach(hand => selectOptions(selectHandedness,hand))
-
-
-pitchOptions.forEach(option => {
+handOptions.forEach(option => {
     option.addEventListener(CLICK, event => {
         setSelectTitle(event)
-        toggleHiddenSpeed()
-        
     })
 })
+
+
 
 button.addEventListener(CLICK, function(event){
     const handselect = convertClockPositions(rightHandClockPositions)
@@ -98,11 +90,10 @@ button.addEventListener(CLICK, function(event){
         grid-template-columns: repeat(2,1fr);
         position: relative;
         gap: 1rem;
-        max-width: fit-content;
         margin-top: 1rem;
     }
     
-    .select-hand, .pitch-cell{
+    .select-hand{
         list-style: none;
 		display: flex;
 		padding: 0.25rem;

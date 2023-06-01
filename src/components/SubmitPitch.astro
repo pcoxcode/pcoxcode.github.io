@@ -3,6 +3,7 @@ import PitchSubmitButton from './SubmitButtons/PitchSubmitButton.astro';
 import ZoneSubmitButton from './SubmitButtons/ZoneSubmitButton.astro';
 import SpeedSubmitButton from './SubmitButtons/SpeedSubmitButton.astro';
 import DynamicSubmitButton from './SubmitButtons/DynamicSubmitButton.astro'
+import HandSubmitButton from './SubmitButtons/HandSubmitButton.astro'
 
 const dynamicZone = [2,3,4,5,6,7,8,9,10];
 const pitchOptions = [12,2,3,4,5,6,7,8,9,10];
@@ -54,6 +55,14 @@ const {title, button} = Astro.props;
                 <div class="div-content Pitch">
                     <div id="delay">
                         <DynamicSubmitButton array={dynamicZone} title="Pitch Delay in Seconds" sport="Baseball"  />
+                    </div>
+                </div>
+            </div>
+            <div>
+                HAND
+                <div class="div-content Hand">
+                    <div id="hand">
+                        <HandSubmitButton title="Pitcher's Hand" sport="Baseball"  />
                     </div>
                 </div>
             </div>
@@ -369,9 +378,10 @@ h3 {
 
 .grid{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: minmax(100px);
-    column-gap: 2%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: minmax(200px);
+    column-gap: 5%;
+    row-gap: 5%;
     justify-items: center;
     text-align: center;
     
@@ -405,10 +415,9 @@ input:focus{
 
 
 .table-body{
-    padding: 1rem 2rem;
+    padding-top: 5rem;
     text-align: center;
-    overflow: hidden;
-    overflow-y: auto;
+    
 }
 .button{
     padding: 0.5rem 1rem;
