@@ -27,6 +27,14 @@ const {title, button} = Astro.props;
         
         <div class="grid">
             <div>
+                HAND
+                <div class="div-content Hand">
+                    <div id="hand">
+                        <HandSubmitButton title="Pitcher's Hand" sport="Baseball"  />
+                    </div>
+                </div>
+            </div>
+            <div>
                 ZONE
                 <div class="div-content zone">
                     <div id="zone">
@@ -55,14 +63,6 @@ const {title, button} = Astro.props;
                 <div class="div-content Pitch">
                     <div id="delay">
                         <DynamicSubmitButton array={dynamicZone} title="Pitch Delay in Seconds" sport="Baseball"  />
-                    </div>
-                </div>
-            </div>
-            <div>
-                HAND
-                <div class="div-content Hand">
-                    <div id="hand">
-                        <HandSubmitButton title="Pitcher's Hand" sport="Baseball"  />
                     </div>
                 </div>
             </div>
