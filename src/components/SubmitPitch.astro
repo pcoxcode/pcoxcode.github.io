@@ -104,10 +104,7 @@ const {title, button} = Astro.props;
 
 <script >
 
-import { table } from "astro/dist/core/logger/core.js";
-import {rightHandClockPositions, fastballSpeeds, RIGHT, FASTBALL, leftHandClockPositions, offspeedSpeeds, crossoverSwitch, LEFT, CLICK} from "../scripts/PitchSelect.js"
-
-import { handSelection } from "../scripts/SpeedSelection.js";
+import {rightHandClockPositions, fastballSpeeds, RIGHT, FASTBALL, leftHandClockPositions, offspeedSpeeds, crossoverSwitch, CLICK} from "../scripts/PitchSelect.js"
 
 var hand = [];
 var pitch = []; 
@@ -243,7 +240,7 @@ const removeTableRow = () => {
 const dataTable = document.getElementById("dataTable");
 const btnExportToCsv = document.getElementById("btnExportToCsv");
 
-btnExportToCsv.addEventListener("click", () => {
+btnExportToCsv.addEventListener(CLICK, () => {
             const exporter = new TableCSVExporter(dataTable);
 
             const csvOutput = exporter.convertToCSV();
@@ -262,17 +259,12 @@ btnExportToCsv.addEventListener("click", () => {
             }, 500);
         });
 
-
-
 const isArray = (value) => {
     if(value === null) return false
     return (typeof value ==='object')
 }
-const objectProps = (object, pitch) => {
-    
-    //let speedCheck = checkSpeed(object[3])
-    //let clockPositions = convertClockPositions(rightHandClockPositions, object[0])
 
+const objectProps = (object, pitch) => {
     let speedFilter = crossoverSwitch(object[3], FASTBALL, offspeedSpeeds, fastballSpeeds)
     let clockFilter = crossoverSwitch(object[0], RIGHT, leftHandClockPositions, rightHandClockPositions)
 
@@ -293,7 +285,6 @@ const objectProps = (object, pitch) => {
 }
 
 const filterCSV = (csv, pitch) =>{
-    let filteredString = csv.replace('Pitch', 'Deflector Position')
     let row = csv.replace('Pitch', 'Deflector Position').split('\n')
     let arrayCsv = []
     for( let i= 0; i < row.length;i++){
@@ -301,17 +292,10 @@ const filterCSV = (csv, pitch) =>{
         arrayCsv.push(cells)   
     }
    let newArray = objectProps(arrayCsv,pitch)
-   console.log(newArray)
    let newNewArray = []
 
-   newArray.forEach( element => {
-    newNewArray = [...newNewArray,element.slice(1)]
-    console.log(element)}
-   )
-    console.log('NEWNEW',newNewArray)
+   newArray.forEach( element => {newNewArray = [...newNewArray,element.slice(1)]})
     let myPeople = newNewArray.join('\n')
-    console.log(myPeople)
-   
     return myPeople
 }
 
@@ -362,10 +346,6 @@ class TableCSVExporter {
         return parsedValue;
     }
 }
-
-
-
-
 </script>
 
 
