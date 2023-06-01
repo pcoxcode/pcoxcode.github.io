@@ -94,7 +94,8 @@ const {title, button} = Astro.props;
 
 
 <script >
-import {rightHandClockPositions, fastballSpeeds, RIGHT, FASTBALL, leftHandClockPositions, offspeedSpeeds, crossoverSwitch } from "../scripts/PitchSelect.js"
+import {rightHandClockPositions, fastballSpeeds, RIGHT, FASTBALL, leftHandClockPositions, offspeedSpeeds, crossoverSwitch
+, LEFT } from "../scripts/PitchSelect.js"
 
 import { handSelection } from "../scripts/SpeedSelection.js";
 
@@ -108,7 +109,6 @@ var c = 1;
 
 var button = document.querySelector('#btn1');
 
-
 button.addEventListener('click', ()=>{
     addToTable()
     removeTableRow()
@@ -119,8 +119,21 @@ function addToTable(){
     
     document.getElementById('no-data').style.display="none";
     
-    var pitchHand = document.getElementsByClassName('select-hand active')[0].textContent
+    var checkpitchRightHand = document.getElementsByClassName('select-hand')[0]
+    var checkpitchLeftHand = document.getElementsByClassName('select-hand')[1]
+    console.log(checkpitchLeftHand,checkpitchRightHand)
+    
+    var checkLeft = checkpitchLeftHand.classList.contains('active')
+    var checkRight = checkpitchRightHand.classList.contains('active') 
+    
+    console.log(checkLeft,checkRight)
+    
+    if(checkLeft == false && checkRight == false){
+        alert('Please Select Handedness in the Pitch Section')
+    }
 
+    var pitchHand = document.getElementsByClassName('select-hand active')[0].textContent
+    
     var pitchSubmission = document.getElementById('pitch').innerText;
     var pitchFilter = pitchSubmission.indexOf('\n')
     var pitchSlice = pitchSubmission.slice(0,pitchFilter)
@@ -131,6 +144,7 @@ function addToTable(){
     var speedSubmission = parseInt(document.getElementById('speed').innerText);
     var zoneSubmission= parseInt(document.getElementById('zone').innerText);
     var delaySubmission= parseInt(document.getElementById('delay').innerText);
+
     
     if(pitchSubmission && speedSubmission && zoneSubmission && pitchHand && delaySubmission){
         hand = [...hand, pitchHand];
