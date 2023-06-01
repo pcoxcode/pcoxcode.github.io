@@ -103,8 +103,9 @@ const {title, button} = Astro.props;
 
 
 <script >
-import {rightHandClockPositions, fastballSpeeds, RIGHT, FASTBALL, leftHandClockPositions, offspeedSpeeds, crossoverSwitch
-, LEFT } from "../scripts/PitchSelect.js"
+
+import { table } from "astro/dist/core/logger/core.js";
+import {rightHandClockPositions, fastballSpeeds, RIGHT, FASTBALL, leftHandClockPositions, offspeedSpeeds, crossoverSwitch, LEFT, CLICK} from "../scripts/PitchSelect.js"
 
 import { handSelection } from "../scripts/SpeedSelection.js";
 
@@ -114,7 +115,7 @@ var speed = [];
 var zone = []; 
 var index = [];
 var delay = []
-var c = 1;
+var count= 1;
 
 var button = document.querySelector('#btn1');
 
@@ -130,12 +131,10 @@ function addToTable(){
     
     var checkpitchRightHand = document.getElementsByClassName('select-hand')[0]
     var checkpitchLeftHand = document.getElementsByClassName('select-hand')[1]
-    console.log(checkpitchLeftHand,checkpitchRightHand)
     
     var checkLeft = checkpitchLeftHand.classList.contains('active')
     var checkRight = checkpitchRightHand.classList.contains('active') 
     
-    console.log(checkLeft,checkRight)
     
     if(checkLeft == false && checkRight == false){
         alert('Please Select Handedness in the Pitch Section')
@@ -161,7 +160,7 @@ function addToTable(){
         speed = [...speed,speedSubmission];
         zone = [...zone,zoneSubmission];
         delay = [...delay,delaySubmission]
-        index = [...index,c];
+        index = [...index,count];
         displayTable();
     }
     else{
@@ -170,7 +169,7 @@ function addToTable(){
 }
 
 function displayTable(){
-    const length= pitch.length;
+    const length = index.length;
     
     var tr= document.createElement('tr');
     tr.classList.add('table-option')
@@ -211,18 +210,34 @@ function displayTable(){
 
         document.getElementsByTagName('tbody')[0].appendChild(tr);
     }
-    c++;
+    count++;
     
+}
+
+function refreshTable(){
+    const length = index.length;
+    count = length + 1
+    var tableBody = document.querySelectorAll('.table-option')
+    tableBody.forEach((tableRow ,index) => {
+        var indexId = tableRow.firstChild
+        var newId = document.createElement('td')
+        newId.innerText = `${index + 1}`
+        tableRow.replaceChild(newId, indexId)
+    })  
 }
 
 const removeTableRow = () => {
     const tableBody = document.querySelectorAll('.table-option')
-    tableBody.forEach(tableRow => tableRow.lastChild.addEventListener('click', event=>{
+    tableBody.forEach(tableRow => tableRow.lastChild.addEventListener(CLICK, event=>{
             const cell = document.getElementById(`${event.target.id}`)
             if(cell == null) return
             var row = cell.parentElement.parentElement
-            row.remove()  
+            row.remove()
+            var rowIndex = row.firstChild.innerText - 1
+            index.pop(rowIndex)
+            refreshTable()
         }))
+
 }
 
 const dataTable = document.getElementById("dataTable");
