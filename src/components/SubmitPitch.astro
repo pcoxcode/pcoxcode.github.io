@@ -14,14 +14,16 @@ export interface Props {
 }
 
 const input_field = ['Pitch', 'Speed','Zone', 'Delay' ]
-const {title, button} = Astro.props;
+const {title} = Astro.props;
 
 ---
 <div class="add-Pitch">
     
     <h3>{title}</h3>
     <div> 
-        
+    <div  class="grid"> 
+        <input type="text" id="sequence-name" placeholder="Enter Sequence Name"/>
+    </div>
     </div>
     <div class="sub-box">
         
@@ -126,6 +128,11 @@ function addToTable(){
     
     document.getElementById('no-data').style.display="none";
     
+    let sequenceName = document.getElementById('sequence-name').value;
+    if(sequenceName == ""){
+        console.log('Empty string')
+    }
+    console.log(sequenceName) 
     var checkpitchRightHand = document.getElementsByClassName('select-hand')[0]
     var checkpitchLeftHand = document.getElementsByClassName('select-hand')[1]
     
@@ -249,9 +256,13 @@ btnExportToCsv.addEventListener(CLICK, () => {
             const csvBlob = new Blob([filteredOutput], { type: "text/csv" });
             const blobUrl = URL.createObjectURL(csvBlob);
             const anchorElement = document.createElement("a");
-
+            let sequenceName = document.getElementById('sequence-name').value;
+            if(sequenceName == ""){
+                sequenceName = "sequence-export"
+            }
+            
             anchorElement.href = blobUrl;
-            anchorElement.download = "table-export.csv";
+            anchorElement.download = sequenceName;
             anchorElement.click();
             
             setTimeout(() => {
