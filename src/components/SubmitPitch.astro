@@ -21,7 +21,7 @@ const {title} = Astro.props;
     
     <h3>{title}</h3>
     <div> 
-    <div  class="grid"> 
+    <div  class="grid">
         <input type="text" id="sequence-name" placeholder="Enter Sequence Name"/>
     </div>
     </div>
@@ -94,7 +94,7 @@ const {title} = Astro.props;
                 <th>Remove</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="table-body">
 
         </tbody>
     </table>
@@ -130,9 +130,9 @@ function addToTable(){
     
     let sequenceName = document.getElementById('sequence-name').value;
     if(sequenceName == ""){
-        console.log('Empty string')
+        sequenceName = 'sequence-export'
     }
-    console.log(sequenceName) 
+
     var checkpitchRightHand = document.getElementsByClassName('select-hand')[0]
     var checkpitchLeftHand = document.getElementsByClassName('select-hand')[1]
     
@@ -165,6 +165,7 @@ function addToTable(){
         zone = [...zone,zoneSubmission];
         delay = [...delay,delaySubmission]
         index = [...index,count];
+
         displayTable();
     }
     else{
@@ -175,7 +176,7 @@ function addToTable(){
 function displayTable(){
     const length = index.length;
     
-    var tr= document.createElement('tr');
+    var tr = document.createElement('tr');
     tr.classList.add('table-option')
     
     for(var i=0;i<length;i++){
@@ -231,14 +232,21 @@ function refreshTable(){
 }
 
 const removeTableRow = () => {
-    const tableBody = document.querySelectorAll('.table-option')
-    tableBody.forEach(tableRow => tableRow.lastChild.addEventListener(CLICK, event=>{
+    const tableOptions = document.querySelectorAll('.table-option')
+    const tableBody = document.getElementById('table-body')
+    tableOptions.forEach(tableRow => tableRow.lastChild.addEventListener(CLICK, event=>{
             const cell = document.getElementById(`${event.target.id}`)
             if(cell == null) return
             var row = cell.parentElement.parentElement
+            tableBody.removeChild(row)
             row.remove()
             var rowIndex = row.firstChild.innerText - 1
             index.pop(rowIndex)
+            hand.pop()
+            zone.pop()
+            pitch.pop()
+            delay.pop()
+            speed.pop()
             refreshTable()
         }))
 
@@ -260,7 +268,7 @@ btnExportToCsv.addEventListener(CLICK, () => {
             if(sequenceName == ""){
                 sequenceName = "sequence-export"
             }
-            
+
             anchorElement.href = blobUrl;
             anchorElement.download = sequenceName;
             anchorElement.click();
