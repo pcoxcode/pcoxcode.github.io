@@ -21,15 +21,16 @@ const {title} = Astro.props;
     
     <h3>{title}</h3>
     <div> 
-    <div  class="grid">
-        <input type="text" id="sequence-name" placeholder="Enter Sequence Name"/>
+    <div class="grid Name">
+        <div>Step 1</div>
+        <div><input type="text" id="sequence-name" placeholder="Enter Sequence Name"/></div>
     </div>
     </div>
     <div class="sub-box">
         
         <div class="grid">
             <div>
-                HAND
+                Step 2
                 <div class="div-content Hand">
                     <div id="hand">
                         <HandSubmitButton title="Pitcher's Hand" sport="Baseball"  />
@@ -37,7 +38,7 @@ const {title} = Astro.props;
                 </div>
             </div>
             <div>
-                ZONE
+                Step 3
                 <div class="div-content zone">
                     <div id="zone">
                         <ZoneSubmitButton title="Zone" sport="Baseball" />
@@ -45,7 +46,7 @@ const {title} = Astro.props;
                 </div>
             </div>
             <div>
-                SPEED
+                Step 4
                 <div class="div-content speed">
                     <div id="speed">
                         <SpeedSubmitButton title="Speed" sport="Baseball" />
@@ -53,7 +54,7 @@ const {title} = Astro.props;
                 </div>
             </div>
             <div>
-                PITCH
+                Step 5
                 <div class="div-content Pitch">
                     <div id="pitch">
                         <PitchSubmitButton title="Pitch" sport="Baseball"  />
@@ -61,7 +62,7 @@ const {title} = Astro.props;
                 </div>
             </div>
             <div>
-                DELAY
+                Step 6
                 <div class="div-content Pitch">
                     <div id="delay">
                         <DynamicSubmitButton array={dynamicZone} title="Pitch Delay in Seconds" sport="Baseball"  />
@@ -69,7 +70,7 @@ const {title} = Astro.props;
                 </div>
             </div>
             <div>
-                ADD PITCH
+                Step 7: ADD PITCH
                 <div class="div-content Add">
                     <div class="btn" id="btn1">
                         +
@@ -233,15 +234,12 @@ function refreshTable(){
 
 const removeTableRow = () => {
     const tableOptions = document.querySelectorAll('.table-option')
-    const tableBody = document.getElementById('table-body')
     tableOptions.forEach(tableRow => tableRow.lastChild.addEventListener(CLICK, event=>{
             const cell = document.getElementById(`${event.target.id}`)
             if(cell == null) return
             var row = cell.parentElement.parentElement
-            tableBody.removeChild(row)
             row.remove()
-            var rowIndex = row.firstChild.innerText - 1
-            index.pop(rowIndex)
+            index.pop()
             hand.pop()
             zone.pop()
             pitch.pop()
@@ -400,7 +398,15 @@ h3 {
     text-align: center;
     
 }
+.Name{
+    justify-content: center;
+    display: grid;
+    grid-template-columns: 50%;
 
+}
+.Add{
+    padding: 10%;
+}
 
 .sub-box{
     text-align: center;
